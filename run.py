@@ -1,6 +1,55 @@
 import colorama
 from colorama import Fore
 
+class InputReader:
+    """
+    Class to handle reading of user input from the CLI
+    The class will allow multi line input from users for attributes like descriptions
+    and will parse users responses accordingly
+
+    ...
+
+    Attributes
+    ----------
+    NA
+
+    Methods
+    -------
+    read_input(multiline):
+        Reads input from the user in a multiline or single line format 
+    """
+
+    def __init__(self):
+        pass
+
+    def read_input(self, multiline):
+        """
+        Adds a section of a given type to the readme object
+
+            Parameters:
+                    multiline (bool): Boolean determining if user input can contain multiple newlines
+
+            Returns:
+                    input_text (String): The user's input
+        """
+        input_text = ""
+
+        if multiline:
+            print(Fore.RED + "[Multi Line] " + Fore.LIGHTYELLOW_EX + "Enter/Paste your content. Ctrl + D or Ctrl + Z (Windows) to submit. " + Fore.WHITE)
+
+            while True:
+                try:
+                    line = input()
+                except EOFError:
+                    break
+                
+                input_text += '\n' + line
+            
+        else:
+            input_text = input()
+
+        return input_text
+
 class Readme:
     """
     A class to represent a readme entity
@@ -82,10 +131,8 @@ class Section:
     def populate_section_info(self):
 
         for question_index in self.questions_dict:
-
             print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
-            answer = input()
-
+            answer = input_reader.read_input(self.questions_dict[question_index]['multiline'])
             self.questions_dict[question_index]['setter_function'](answer)
 
 class IntroSection(Section):
@@ -114,15 +161,18 @@ class IntroSection(Section):
         questions_dict = {
             1: {
                 "question": "Describe your project: ",
-                "setter_function": self.set_description
+                "setter_function": self.set_description,
+                "multiline": True
             },
             2: {
                 "question": "Provide a demo link to your project: ",
-                "setter_function": self.set_demo_link
+                "setter_function": self.set_demo_link,
+                "multiline": False
             },
             3: {
                 "question": "Path to your intro image: ",
-                "setter_function": self.set_intro_image
+                "setter_function": self.set_intro_image,
+                "multiline": False
             },
         }
 
@@ -162,4 +212,5 @@ def main():
     print(raw_readme_output)
 
 if __name__ == "__main__":
+    input_reader = InputReader()
     main()
