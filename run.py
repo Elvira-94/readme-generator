@@ -38,6 +38,23 @@ class Readme:
         section = self.section_classes[section_type](self)
         self.sections[section_type] = section
 
+    def output_raw(self):
+        """
+        Outputs the readme file in raw format includig all added sections
+
+            Parameters:
+                    NA
+
+            Returns:
+                output (Str): The raw format of the readme file sections
+        """
+
+        output = ""
+        for section_type in self.sections:
+            output += self.sections[section_type].output_raw()
+
+        return output
+
 class Section:
     """
     A class to a represent generic document section. 
@@ -123,7 +140,11 @@ class IntroSection(Section):
     def set_intro_image(self, intro_image_path):
         self.intro_image = intro_image_path
 
+    def output_raw(self):
 
-readme = Readme('Project')
-readme.add_section('Intro')
-readme.sections['Intro'].populate_section_info()
+        header_raw = f"## {self.header}"
+        demo_link_raw = f"You can view the live project here: <a href='{self.demo_link}' target='_blank' rel='noopener'>{self.readme.title}</a>"
+
+        output = header_raw + "\n\n" + self.description + "\n\n" + demo_link_raw
+
+        return output
