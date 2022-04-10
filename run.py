@@ -35,5 +35,22 @@ class Readme:
         section = self.section_classes[section_type](self)
         self.sections[section_type] = section
 
+class Section:
+    """
+    A class to a represent generic document section. 
 
+    ...
+
+    Attributes
+    ----------
+    readme : Readme
+        The readme object that the section belongs to
+
+    Methods
+    -------
+    
+    """
+
+    def __init__(self, readme):
+        self.readme = readme
 
