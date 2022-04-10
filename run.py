@@ -65,7 +65,7 @@ class Section:
 
         for question_index in self.questions_dict:
 
-            print(self.questions_dict[question_index]['question'])
+            print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
             answer = input()
 
             self.questions_dict[question_index]['setter_function'](answer)
@@ -122,3 +122,8 @@ class IntroSection(Section):
        
     def set_intro_image(self, intro_image_path):
         self.intro_image = intro_image_path
+
+
+readme = Readme('Project')
+readme.add_section('Intro')
+readme.sections['Intro'].populate_section_info()
