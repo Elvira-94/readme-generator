@@ -1,3 +1,6 @@
+import colorama
+from colorama import Fore
+
 class Readme:
     """
     A class to represent a readme entity
