@@ -105,6 +105,11 @@ class Readme:
 
         return output
 
+    def output_to_file(self):
+
+        with open("Generated_README.md","w") as f:
+            f.write(self.output_raw())
+
 class Section:
     """
     A class to a represent generic document section. 
@@ -207,9 +212,8 @@ def main():
 
     readme_object = Readme(project_name)
     readme_object.add_section('Intro')
-    raw_readme_output = readme_object.output_raw()
+    readme_object.output_to_file()
 
-    print(raw_readme_output)
 
 if __name__ == "__main__":
     input_reader = InputReader()
