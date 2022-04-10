@@ -36,6 +36,7 @@ class Readme:
                     NA
         """
         section = self.section_classes[section_type](self)
+        section.populate_section_info()
         self.sections[section_type] = section
 
     def output_raw(self):
@@ -69,7 +70,7 @@ class Section:
     Methods
     -------
     populate_section_info()
-        Loops through section questions and calls a setter function for the 
+        Loops through section questions and calls a setter function for the
         section to populate the section attribute with user input
     """
 
@@ -148,3 +149,17 @@ class IntroSection(Section):
         output = header_raw + "\n\n" + self.description + "\n\n" + demo_link_raw
 
         return output
+
+def main():
+
+    print(Fore.YELLOW + "Project Name: " + Fore.WHITE)
+    project_name = input()
+
+    readme_object = Readme(project_name)
+    readme_object.add_section('Intro')
+    raw_readme_output = readme_object.output_raw()
+
+    print(raw_readme_output)
+
+if __name__ == "__main__":
+    main()
