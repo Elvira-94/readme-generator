@@ -18,7 +18,7 @@ class Readme:
     def __init__(self, title):
         self.title = title
         self.section_classes = {
-            
+            'Intro':IntroSection
         }
         self.sections = {}
 
@@ -54,3 +54,26 @@ class Section:
     def __init__(self, readme):
         self.readme = readme
 
+class IntroSection(Section):
+    """
+    A class to represent the Intro Section of the readme. 
+
+    ...
+
+    Attributes
+    ----------
+    name : str
+        first name of the person
+    surname : str
+        family name of the person
+    age : int
+        age of the person
+
+    Methods
+    -------
+    info(additional=""):
+        Prints the person's name and age.
+    """
+
+    def __init__(self, readme):
+        super().__init__(readme)
