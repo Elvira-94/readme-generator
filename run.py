@@ -277,10 +277,16 @@ class UserExperienceSection(Section):
                 "question": "What are the aims of the site: ",
                 "setter_function": self.set_site_aims,
                 "multiline": True
+            },
+            2: {
+                "question": "Who is the target audience of the site:",
+                "setter_function": self.set_target_audience,
+                "multiline": True
             }
         }
 
         self.site_aims = []
+        self.target_audience = []
 
         super().__init__(readme, questions_dict, header="User Experience")
 
@@ -300,11 +306,29 @@ class UserExperienceSection(Section):
 
         return output
 
+    def set_target_audience(self, target_audience):
+
+        audience_split = target_audience.split('\n')
+        for target in audience_split:
+            if target:
+                self.target_audience.append(target)
+
+    def output_target_audience(self):
+
+        output = "### Target Audience\n\n"
+
+        for target in self.target_audience:
+
+            output += f" * {target.capitalize()}\n"
+
+        return output
+
     def output_raw(self):
 
         header_raw = f"## {self.header}"
 
-        output = header_raw + "\n\n" + self.output_site_aims() + "\n\n"
+        output = header_raw + "\n\n" + self.output_site_aims() + "\n\n"\
+            + self.output_target_audience() + "\n\n"
 
         return output
 
