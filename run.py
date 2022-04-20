@@ -1,3 +1,5 @@
+import math
+import tabulate
 import colorama
 from colorama import Fore
 
@@ -187,10 +189,12 @@ class Section:
         
         for question_index in self.questions_dict:
 
-
-            print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
-            answer = input_reader.read_input(self.questions_dict[question_index]['multiline'])
-            self.questions_dict[question_index]['setter_function'](answer)
+            if self.questions_dict[question_index].get('custom_handling'):
+                self.questions_dict[question_index]['setter_function']()
+            else:
+                print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
+                answer = input_reader.read_input(self.questions_dict[question_index]['multiline'])
+                self.questions_dict[question_index]['setter_function'](answer)
 
 
 class IntroSection(Section):
@@ -282,16 +286,22 @@ class UserExperienceSection(Section):
                 "question": "Who is the target audience of the site:",
                 "setter_function": self.set_target_audience,
                 "multiline": True
+            },
+            3: {
+                "question": "Please Provide User Stories:",
+                "setter_function": self.set_user_stories,
+                "custom_handling": True
             }
         }
 
         self.site_aims = []
         self.target_audience = []
+        self.user_stories = []
 
         super().__init__(readme, questions_dict, header="User Experience")
 
     def set_site_aims(self, site_aims):
-        
+
         aims_split = site_aims.split('\n')
         for aim in aims_split:
             if aim:
@@ -323,12 +333,82 @@ class UserExperienceSection(Section):
 
         return output
 
+    def set_user_stories(self):
+
+        while True:
+            print(Fore.YELLOW + "Action:" + Fore.WHITE)
+            action = input()
+            print(Fore.YELLOW + "Goal:" + Fore.WHITE)
+            goal = input()
+
+            confirmed = input('Confirm Story [Y/N]: ').upper()
+            while confirmed != 'Y' and confirmed != 'N':
+                print('Please try again...')
+                confirmed = input('Confirm Story [Y/N]: ')
+
+            if confirmed == 'Y':
+                self.user_stories.append({
+                    'action': action,
+                    'goal': goal
+                })
+
+            again = input('Add another story [Y/N]: ').upper()
+            while again != 'Y' and again != 'N':
+                print('Please try again...')
+                again = input('Add another story [Y/N]:  ')
+
+            if again == 'N':
+                break
+        
+    def output_user_stories(self):
+
+        goal_length = 0
+        action_length = 0
+
+        output = ""
+
+        for story in self.user_stories:
+            if len(story['goal']) > goal_length:
+                goal_length = len(story['goal']) - len('Goal') + 2
+
+            if len(story['action']) > action_length:
+                action_length = len(story['action']) - len('Action') + 2
+
+        id_header = " ID "
+        goal_header = ""
+        action_header = ""
+        
+        for i in range(goal_length):
+            
+            if i == math.ceil(goal_length/2):
+                goal_header += "Goal "
+            else:
+                goal_header += ' '
+
+        for i in range(action_length):
+            
+            if i == math.ceil(action_length/2):
+                action_header += "Action "
+            else:
+                action_header += ' '
+
+        output += '|' + id_header + '|' + goal_header + '|' + action_header + '|' + '\n'
+        
+        for i in range(len(id_header) + len(goal_header) + len(action_header) + 4):
+            output += '-'
+
+        return output
+
+
+
     def output_raw(self):
 
         header_raw = f"## {self.header}"
 
-        output = header_raw + "\n\n" + self.output_site_aims() + "\n\n"\
-            + self.output_target_audience() + "\n\n"
+        output = header_raw + "\n\n" \
+            + self.output_site_aims() + "\n\n"\
+            + self.output_target_audience() + "\n\n"\
+            + self.output_user_stories() + "\n\n"
 
         return output
 
