@@ -50,6 +50,7 @@ class InputReader:
 
         return input_text
 
+
 class Readme:
     """
     A class to represent a readme entity
@@ -69,11 +70,10 @@ class Readme:
 
     def __init__(self, title, menu_handler):
         self.title = title
-        self.section_classes = {
-            'Intro': IntroSection
-        }
         self.sections = {}
+
         self.menu_handler = menu_handler
+        self.intro_section = None
 
     def display_menu(self):
         menu = {
@@ -115,7 +115,7 @@ class Readme:
             "options": {
                 "1": {
                     "prompt": "Introduction",
-                    "mapping": "Intro"
+                    "mapping": IntroSection
                 },
                 "2": {
                     "prompt": "Intended Audience",
@@ -129,11 +129,10 @@ class Readme:
         }
 
         response = self.menu_handler.process_menu(menu)
-        section_type = menu.get('options').get(response).get('mapping')
+        section = menu.get('options').get(response).get('mapping')(self)
 
-        section = self.section_classes[section_type](self)
         section.display_menu()
-        self.sections[section_type] = section
+        self.sections[menu.get('options').get(response).get('prompt')] = section
 
     def output_raw(self):
         """
@@ -150,12 +149,13 @@ class Readme:
         for section_type in self.sections:
             output += self.sections[section_type].output_raw()
 
-        return output
+        print(output)
 
     def output_to_file(self):
 
         with open("Generated_README.md","w") as f:
             f.write(self.output_raw())
+
 
 class Section:
     """
@@ -181,11 +181,14 @@ class Section:
         self.questions_dict = questions_dict
 
     def display_menu(self):
-
+        
         for question_index in self.questions_dict:
+
+
             print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
             answer = input_reader.read_input(self.questions_dict[question_index]['multiline'])
             self.questions_dict[question_index]['setter_function'](answer)
+
 
 class IntroSection(Section):
     """
@@ -451,10 +454,10 @@ class MenuHandler:
 
 class Session:
     """
-    A class to a represent a user's current session in the tool. 
+    A class to a represent a user's current session in the tool.
 
-    A session is created when a user runs the tool, and is terminated when 
-    the tool has exited. 
+    A session is created when a user runs the tool, and is terminated when
+    the tool has exited.
 
     The session handles the core functionality of the tool.
 
@@ -560,9 +563,11 @@ class Session:
         """
         pass
 
+
 def main():
     session = Session()
     session.start()
+
 
 if __name__ == "__main__":
     input_reader = InputReader()
