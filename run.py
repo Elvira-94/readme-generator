@@ -74,7 +74,35 @@ class Readme:
         }
         self.sections = {}
 
-    def add_section(self, section_type):
+    def display_menu(self):
+        menu = {
+            "prompt": "What would you like to do:",
+            "type": "choice",
+            "options": {
+                "1": {
+                    "prompt": "Add Section",
+                    "action": self.add_section
+                },
+                "2": {
+                    "prompt": "View Readme",
+                    "action": self.output_raw
+                },
+                "3": {
+                    "prompt": "Create Readme File",
+                    "action": self.output_to_file
+                }
+            }
+        }
+
+        print(Fore.YELLOW + menu.get('prompt') + Fore.WHITE)
+        for key in menu.get('options', []).keys():
+            print(f'[{key}] {menu.get("options", {}).get(key).get("prompt")}')
+
+        response = input_reader.read_input(False)
+
+        menu.get('options').get(response).get('action')()
+
+    def add_section(self):
         """
         Adds a section of a given type to the readme object
 
@@ -84,8 +112,34 @@ class Readme:
             Returns:
                     NA
         """
+        menu = {
+            "prompt": "Which section type would you like to add?",
+            "type": "choice",
+            "options": {
+                "1": {
+                    "prompt": "Introduction",
+                    "mapping": "Intro"
+                },
+                "2": {
+                    "prompt": "Intended Audience",
+                    "mapping": "IntendedAudience"
+                },
+                "3": {
+                    "prompt": "Testing",
+                    "mapping": "Testing"
+                }
+            }
+        }
+
+        print(Fore.YELLOW + menu.get('prompt') + Fore.WHITE)
+        for key in menu.get('options', []).keys():
+            print(f'[{key}] {menu.get("options", {}).get(key).get("prompt")}')
+
+        response = input_reader.read_input(False)
+        section_type = menu.get('options').get(response).get('mapping')
+
         section = self.section_classes[section_type](self)
-        section.populate_section_info()
+        section.display_menu()
         self.sections[section_type] = section
 
     def output_raw(self):
@@ -133,7 +187,7 @@ class Section:
         self.header = header
         self.questions_dict = questions_dict
 
-    def populate_section_info(self):
+    def display_menu(self):
 
         for question_index in self.questions_dict:
             print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
@@ -211,8 +265,7 @@ def main():
     project_name = input()
 
     readme_object = Readme(project_name)
-    readme_object.add_section('Intro')
-    readme_object.output_to_file()
+    readme_object.display_menu()
 
 
 if __name__ == "__main__":
