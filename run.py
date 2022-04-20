@@ -86,7 +86,7 @@ class Readme:
                 },
                 "2": {
                     "prompt": "View Readme",
-                    "action": self.output_raw
+                    "action": self.preview_readme
                 },
                 "3": {
                     "prompt": "Create Readme File",
@@ -118,8 +118,8 @@ class Readme:
                     "mapping": IntroSection
                 },
                 "2": {
-                    "prompt": "Intended Audience",
-                    "mapping": "IntendedAudience"
+                    "prompt": "User Experience",
+                    "mapping": UserExperienceSection
                 },
                 "3": {
                     "prompt": "Testing",
@@ -133,6 +133,9 @@ class Readme:
 
         section.display_menu()
         self.sections[menu.get('options').get(response).get('prompt')] = section
+
+    def preview_readme(self):
+        print(self.output_raw())
 
     def output_raw(self):
         """
@@ -149,7 +152,7 @@ class Readme:
         for section_type in self.sections:
             output += self.sections[section_type].output_raw()
 
-        print(output)
+        return output
 
     def output_to_file(self):
 
@@ -242,7 +245,7 @@ class IntroSection(Section):
 
     def set_demo_link(self, demo_link):
         self.demo_link = demo_link
-       
+
     def set_intro_image(self, intro_image_path):
         self.intro_image = intro_image_path
 
@@ -251,7 +254,57 @@ class IntroSection(Section):
         header_raw = f"## {self.header}"
         demo_link_raw = f"You can view the live project here: <a href='{self.demo_link}' target='_blank' rel='noopener'>{self.readme.title}</a>"
 
-        output = header_raw + "\n\n" + self.description + "\n\n" + demo_link_raw
+        output = header_raw + "\n\n" + self.description + "\n\n" + demo_link_raw + "\n\n"
+
+        return output
+
+
+class UserExperienceSection(Section):
+    """
+    A class to represent the User Experience Section of the readme.
+
+    Subsections
+    - Site Aims
+    - Target Audience
+    - User Stories
+    - Site Structure
+    - Flow Chart
+    """
+
+    def __init__(self, readme):
+        questions_dict = {
+            1: {
+                "question": "What are the aims of the site: ",
+                "setter_function": self.set_site_aims,
+                "multiline": True
+            }
+        }
+
+        self.site_aims = []
+
+        super().__init__(readme, questions_dict, header="User Experience")
+
+    def set_site_aims(self, site_aims):
+        
+        aims_split = site_aims.split('\n')
+        for aim in aims_split:
+            if aim:
+                self.site_aims.append(aim)
+
+    def output_site_aims(self):
+        output = "### Site Aims\n\n"
+
+        for aim in self.site_aims:
+
+            output += f" * {aim.capitalize()}\n"
+
+        return output
+
+    def output_raw(self):
+
+        header_raw = f"## {self.header}"
+
+        output = header_raw + "\n\n" + self.output_site_aims() + "\n\n"
 
         return output
 
