@@ -341,10 +341,10 @@ class UserExperienceSection(Section):
             print(Fore.YELLOW + "Goal:" + Fore.WHITE)
             goal = input()
 
-            confirmed = input('Confirm Story [Y/N]: ').upper()
+            confirmed = input('Confirm Story [Y/N]: \n').upper()
             while confirmed != 'Y' and confirmed != 'N':
                 print('Please try again...')
-                confirmed = input('Confirm Story [Y/N]: ')
+                confirmed = input('Confirm Story [Y/N]: \n')
 
             if confirmed == 'Y':
                 self.user_stories.append({
@@ -352,10 +352,10 @@ class UserExperienceSection(Section):
                     'goal': goal
                 })
 
-            again = input('Add another story [Y/N]: ').upper()
+            again = input('Add another story [Y/N]: \n').upper()
             while again != 'Y' and again != 'N':
                 print('Please try again...')
-                again = input('Add another story [Y/N]:  ')
+                again = input('Add another story [Y/N]:  \n')
 
             if again == 'N':
                 break
@@ -398,7 +398,6 @@ class UserExperienceSection(Section):
             output += '-'
 
         return output
-
 
 
     def output_raw(self):
