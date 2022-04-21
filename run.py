@@ -1,14 +1,13 @@
 import math
-import tabulate
 import colorama
 from colorama import Fore
+from tabulate import tabulate
 
 class InputReader:
     """
     Class to handle reading of user input from the CLI
-    The class will allow multi line input from users for attributes like descriptions
-    and will parse users responses accordingly
-
+    The class will allow multi line input from users for attributes like
+    descriptions and will parse users responses accordingly
     ...
 
     Attributes
@@ -29,7 +28,8 @@ class InputReader:
         Adds a section of a given type to the readme object
 
             Parameters:
-                    multiline (bool): Boolean determining if user input can contain multiple newlines
+                    multiline (bool): Boolean determining if user input can
+                    contain multiple newlines
 
             Returns:
                     input_text (String): The user's input
@@ -361,44 +361,13 @@ class UserExperienceSection(Section):
                 break
         
     def output_user_stories(self):
+        headers = ["ID", "GOAL", "ACTION"]
+        rows = []
 
-        goal_length = 0
-        action_length = 0
+        for i in range(len(self.user_stories)):
+            rows.append([i+1, self.user_stories[i]['goal'], self.user_stories[i]['action']])
 
-        output = ""
-
-        for story in self.user_stories:
-            if len(story['goal']) > goal_length:
-                goal_length = len(story['goal']) - len('Goal') + 2
-
-            if len(story['action']) > action_length:
-                action_length = len(story['action']) - len('Action') + 2
-
-        id_header = " ID "
-        goal_header = ""
-        action_header = ""
-        
-        for i in range(goal_length):
-            
-            if i == math.ceil(goal_length/2):
-                goal_header += "Goal "
-            else:
-                goal_header += ' '
-
-        for i in range(action_length):
-            
-            if i == math.ceil(action_length/2):
-                action_header += "Action "
-            else:
-                action_header += ' '
-
-        output += '|' + id_header + '|' + goal_header + '|' + action_header + '|' + '\n'
-        
-        for i in range(len(id_header) + len(goal_header) + len(action_header) + 4):
-            output += '-'
-
-        return output
-
+        return tabulate(rows, headers=headers, tablefmt="github")
 
     def output_raw(self):
 
