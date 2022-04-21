@@ -20,6 +20,7 @@ class Readme:
     def __init__(self, title, menu_handler):
         self.title = title
         self.sections = {}
+        self.image_path = ""
 
         self.menu_handler = menu_handler
         self.intro_section = None

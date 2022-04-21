@@ -30,12 +30,18 @@ class UserExperienceSection(Section):
                 "question": "Please Provide User Stories:",
                 "setter_function": self.set_user_stories,
                 "custom_handling": True
+            },
+            4: {
+                "question": "Please provide the path to your flowchart image:",
+                "setter_function": self.set_flowchart,
+                "multiline": False
             }
         }
 
         self.site_aims = []
         self.target_audience = []
         self.user_stories = []
+        self.flowchart = None
 
         super().__init__(readme, questions_dict, header="User Experience")
 
@@ -107,6 +113,17 @@ class UserExperienceSection(Section):
             rows.append([i+1, self.user_stories[i]['goal'], self.user_stories[i]['action']])
 
         return tabulate(rows, headers=headers, tablefmt="github")
+    
+    def set_flowchart(self, flowchart_path):
+        self.flowchart = flowchart_path
+
+    def output_flowchart(self):
+
+        output = "### Flowchart\n\n"
+        output += f"![{self.readme.title} Flowchart](" \
+            + self.readme.image_path + '/' + self.flowchart \
+            + "})\n\n"
+        return output
 
     def output_raw(self):
 
@@ -115,7 +132,7 @@ class UserExperienceSection(Section):
         output = header_raw + "\n\n" \
             + self.output_site_aims() + "\n\n"\
             + self.output_target_audience() + "\n\n"\
-            + self.output_user_stories() + "\n\n"
+            + self.output_user_stories() + "\n\n"\
+            + self.output_flowchart() + "\n\n"
 
         return output
-
