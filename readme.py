@@ -18,7 +18,8 @@ class Readme:
         Adds a section of a given type to the readme object
     """
 
-    def __init__(self, title, menu_handler):
+    def __init__(self, session, title, menu_handler):
+        self.session = session
         self.title = title
         self.sections = {}
         self.image_path = ""
@@ -47,6 +48,10 @@ class Readme:
                 "3": {
                     "prompt": "Create Readme File",
                     "action": self.output_to_file
+                },
+                "4": {
+                    "prompt": "Return to Main Menu",
+                    "action": self.detach_from_session
                 }
             }
         }
@@ -54,6 +59,9 @@ class Readme:
         response = self.menu_handler.process_menu(menu)
 
         menu.get('options').get(response).get('action')()
+
+    def detach_from_session(self):
+        self.session.set_current_readme(None)
 
     def add_section(self):
         """

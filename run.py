@@ -93,6 +93,10 @@ class Session:
                     "2": {
                         "prompt": "Load Previous README File",
                         "action": self.list_readmes_to_load
+                    },
+                    "3": {
+                        "prompt": "Exit",
+                        "action": exit
                     }
                 }
             }
@@ -120,11 +124,11 @@ class Session:
         print(Fore.YELLOW + "Project Name: " + Fore.WHITE)
         project_name = input()
 
-        readme_object = Readme(project_name, self.menu_handler)
+        readme_object = Readme(self, project_name, self.menu_handler)
         self.set_current_readme(readme_object)
 
     def load_readme(self, readme_name):
-        readme = Readme(readme_name, self.menu_handler)
+        readme = Readme(self, readme_name, self.menu_handler)
 
         worksheet = SHEET.worksheet(readme_name)
 
