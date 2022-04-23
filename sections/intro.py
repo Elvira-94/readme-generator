@@ -58,7 +58,6 @@ class IntroSection(Section):
         return self.description
 
     def set_demo_link(self, demo_link):
-        
         if demo_link:
             self.demo_link = demo_link
 

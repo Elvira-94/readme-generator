@@ -26,7 +26,7 @@ class Section:
     def display_menu(self):
 
         for question_index in self.questions_dict:
-
+            self.readme.menu_handler.clear_screen()
             if self.questions_dict[question_index].get('custom_handling'):
                 self.questions_dict[question_index]['setter_function']()
             else:
@@ -35,7 +35,8 @@ class Section:
                     preview = self.questions_dict[question_index].get('preview_function')()
                     
                     if preview:
-                        print('\n' + Fore.MAGENTA + 'Current Value: ' + Fore.LIGHTMAGENTA_EX + preview + Fore.WHITE + '\n')
+                        print('\n' + Fore.MAGENTA + 'Current Value: ' + Fore.LIGHTMAGENTA_EX + preview + Fore.WHITE)
+                        print(Fore.MAGENTA + 'Leave input blank to not modify current value.' + Fore.WHITE)
 
                 answer = self.readme.menu_handler.input_reader.read_input(self.questions_dict[question_index]['multiline'])
                 self.questions_dict[question_index]['setter_function'](answer)
