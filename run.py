@@ -122,9 +122,16 @@ class Session:
         readme_object = Readme(project_name, self.menu_handler)
         self.set_current_readme(readme_object)
 
-    def load_readme(self):
-        pass
+    def load_readme(self, readme_name):
+        readme = Readme(readme_name, self.menu_handler)
+
+        worksheet = SHEET.worksheet(readme_name)
+
+        readme.load_sections(worksheet)
+
+        self.set_current_readme(readme)
         
+  
     def list_readmes_to_load(self):
         """
         Lists the current Readmes that have been saved to Google Sheets
@@ -145,9 +152,7 @@ class Session:
 
         response = self.menu_handler.process_menu(menu)
 
-        menu.get('options').get(response).get('action')()
-        
-
+        menu.get('options').get(response).get('action')(menu.get('options').get(response).get('prompt'))
 
 
 def main():

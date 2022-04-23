@@ -67,3 +67,15 @@ class IntroSection(Section):
             "\n\n" + demo_link_raw + "\n\n"
 
         return output
+
+    def load_section(self, sheet_data):
+
+        print(sheet_data)
+        for row in sheet_data:
+            if row.get('Data Type') == 'description':
+                self.description = row.get('Value')
+            elif row.get('Data Type') == 'demo_link':
+                self.demo_link = row.get('Value')
+            elif row.get('Data Type') == 'intro_image_path':
+                self.intro_image = row.get('Value')
+        

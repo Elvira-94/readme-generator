@@ -22,6 +22,11 @@ class Readme:
         self.sections = {}
         self.image_path = ""
 
+        self.section_types = {
+            'Introduction': sections.IntroSection,
+            'User Experience': sections.UserExperienceSection
+        }
+
         self.menu_handler = menu_handler
         self.intro_section = None
 
@@ -59,6 +64,7 @@ class Readme:
             Returns:
                     NA
         """
+
         menu = {
             "prompt": "Which section type would you like to add?",
             "type": "choice",
@@ -85,6 +91,30 @@ class Readme:
         self.sections[
             menu.get('options').get(response).get('prompt')
         ] = section
+
+    def load_sections(self, worksheet):
+        
+        worksheet_data = worksheet.get_all_records()
+
+        section_records = {}
+
+        for row in worksheet_data:
+            if section_records.get(row.get('Section Type')):
+                section_records[row.get('Section Type')].append(row)
+            else:
+                section_records[row.get('Section Type')] = [row]
+
+        for key in section_records.keys():
+            section_class = self.section_types.get(key)
+
+            if section_class:
+                section_object = section_class(self)
+                section_object.load_section(section_records[key])
+
+                self.sections[key] = section_object
+                print(self.sections)
+            else:
+                raise Exception(f"Unknown Class Found in README: {key}")
 
     def preview_readme(self):
         print(self.output_raw())

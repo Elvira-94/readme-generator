@@ -136,3 +136,20 @@ class UserExperienceSection(Section):
             + self.output_flowchart() + "\n\n"
 
         return output
+
+    def load_section(self, sheet_data):
+        for row in sheet_data:
+            if row.get('Data Type') == 'aims':
+                self.site_aims.append(row.get('Value'))
+            elif row.get('Data Type') == 'target_audience':
+                self.target_audience.append(row.get('Value'))
+            elif row.get('Data Type') == 'user_stories':
+                goal = row.get('Value').split('|')[0]
+                action = row.get('Value').split('|')[1]
+
+                self.user_stories.append({
+                    "goal": goal,
+                    "action": action
+                })
+            elif row.get('Data Type') == 'flowchart':
+                self.flowchart = row.get('Value')
