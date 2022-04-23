@@ -34,7 +34,11 @@ class InputReader:
         input_text = ""
 
         if multiline:
-            print(Fore.RED + "[Multi Line] " + Fore.LIGHTYELLOW_EX + "Enter/Paste your content. Ctrl + D or Ctrl + Z (Windows) to submit. " + Fore.WHITE)
+            print(
+                Fore.RED + "[Multi Line] " + Fore.LIGHTYELLOW_EX + 
+                "Enter/Paste your content. Ctrl + D or Ctrl + Z (Windows) to submit. " +
+                Fore.WHITE
+            )
 
             while True:
                 try:

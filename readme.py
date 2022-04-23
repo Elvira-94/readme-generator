@@ -1,4 +1,5 @@
 import sections
+from colorama import Fore
 
 class Readme:
     """
@@ -85,12 +86,17 @@ class Readme:
         }
 
         response = self.menu_handler.process_menu(menu)
-        section = menu.get('options').get(response).get('mapping')(self)
 
-        section.display_menu()
-        self.sections[
-            menu.get('options').get(response).get('prompt')
-        ] = section
+        # If a section has already been created before, call that section object rather than creating a new one
+        if self.sections.get(menu.get('options').get(response).get('prompt')):
+            self.sections.get(menu.get('options').get(response).get('prompt')).display_menu()
+        else:
+            section = menu.get('options').get(response).get('mapping')(self)
+
+            section.display_menu()
+            self.sections[
+                menu.get('options').get(response).get('prompt')
+            ] = section
 
     def load_sections(self, worksheet):
         
@@ -117,7 +123,17 @@ class Readme:
                 raise Exception(f"Unknown Class Found in README: {key}")
 
     def preview_readme(self):
+        print(Fore.YELLOW + "\n\n\n|||||||||||||||||||||||")
+        print("||                   ||")
+        print("||       README      ||")
+        print("||       BELOW       ||")
+        print("||                   ||")
+        print("|||||||||||||||||||||||\n\n\n" + Fore.WHITE)
+
         print(self.output_raw())
+        print(Fore.RED + "If the readme is longer than the terminal window,\n" + 
+            "please scroll up to view more content" + Fore.WHITE)
+        input(Fore.YELLOW + "Press enter to continue.." + Fore.WHITE)
 
     def output_raw(self):
         """

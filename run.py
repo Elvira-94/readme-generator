@@ -67,6 +67,7 @@ class Session:
         while True:
             self.main_menu()
 
+
     def main_menu(self):
         """
         Shows the main menu of the tool to the user.
@@ -130,8 +131,7 @@ class Session:
         readme.load_sections(worksheet)
 
         self.set_current_readme(readme)
-        
-  
+
     def list_readmes_to_load(self):
         """
         Lists the current Readmes that have been saved to Google Sheets

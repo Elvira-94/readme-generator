@@ -31,5 +31,11 @@ class Section:
                 self.questions_dict[question_index]['setter_function']()
             else:
                 print(Fore.YELLOW + self.questions_dict[question_index]['question'] + Fore.WHITE)
+                if self.questions_dict[question_index].get('preview_function'):
+                    preview = self.questions_dict[question_index].get('preview_function')()
+                    
+                    if preview:
+                        print('\n' + Fore.MAGENTA + 'Current Value: ' + Fore.LIGHTMAGENTA_EX + preview + Fore.WHITE + '\n')
+
                 answer = self.readme.menu_handler.input_reader.read_input(self.questions_dict[question_index]['multiline'])
                 self.questions_dict[question_index]['setter_function'](answer)

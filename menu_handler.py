@@ -1,3 +1,4 @@
+import os
 from colorama import Fore
 from input_reader import InputReader
 
@@ -48,6 +49,9 @@ class MenuHandler:
 
         return response
 
+    def clear_screen(self):
+        os.system('clear')
+
     def display_menu(self, menu):
         """
         Displays menu prompts in the terminal in standardised format
@@ -78,6 +82,7 @@ class MenuHandler:
             NA
 
         """
+        self.clear_screen()
         print(Fore.YELLOW + menu.get('prompt') + Fore.WHITE)
         for key in menu.get('options', []).keys():
             print(f'[{key}] {menu.get("options", {}).get(key).get("prompt")}')
