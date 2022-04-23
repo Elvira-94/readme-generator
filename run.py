@@ -1,10 +1,16 @@
-from colorama import Fore
-from tabulate import tabulate
-from readme import Readme
-from menu_handler import MenuHandler
+"""
+This module is responsible for the core running of Readme Generator.
+It is the first module entered when the program is executed.
+
+The module keeps track of user sessions, and handles main menu functionality
+"""
 
 import gspread
+from colorama import Fore
 from google.oauth2.service_account import Credentials
+
+from readme import Readme
+from menu_handler import MenuHandler
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -67,7 +73,6 @@ class Session:
         while True:
             self.main_menu()
 
-
     def main_menu(self):
         """
         Shows the main menu of the tool to the user.
@@ -128,6 +133,12 @@ class Session:
         self.set_current_readme(readme_object)
 
     def load_readme(self, readme_name):
+        """
+        Loads a specified readme file data from google sheets,
+        creates a readme object and instructs the readme object
+        to create appropriate section objects
+        """
+
         readme = Readme(self, readme_name, self.menu_handler)
 
         worksheet = SHEET.worksheet(readme_name)
@@ -156,10 +167,15 @@ class Session:
 
         response = self.menu_handler.process_menu(menu)
 
-        menu.get('options').get(response).get('action')(menu.get('options').get(response).get('prompt'))
+        menu.get('options').get(response)\
+            .get('action')(menu.get('options').get(response).get('prompt'))
 
 
 def main():
+    """
+    Main function for the program.
+    Create a user session and starts the session
+    """
     session = Session()
     session.start()
 
