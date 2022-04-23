@@ -118,6 +118,7 @@ class MenuHandler:
             response (str): The validated input that the user has provided
 
         """
+        print(Fore.YELLOW + "\n\nEnter Your Input Below:" + Fore.WHITE)
         user_input = self.input_reader.read_input(menu.get('multiline'))
 
         if menu.get('type') == 'choice':
