@@ -3,6 +3,20 @@ from tabulate import tabulate
 from readme import Readme
 from menu_handler import MenuHandler
 
+import gspread
+from google.oauth2.service_account import Credentials
+
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+CREDS = Credentials.from_service_account_file('creds.json')
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open('readme_generator')
+
 
 class Session:
     """
@@ -77,7 +91,7 @@ class Session:
                     },
                     "2": {
                         "prompt": "Load Previous README File",
-                        "action": self.load_readme
+                        "action": self.list_readmes_to_load
                     }
                 }
             }
@@ -109,11 +123,31 @@ class Session:
         self.set_current_readme(readme_object)
 
     def load_readme(self):
-        """
-        Will load a readme from a file
-        WIP
-        """
         pass
+        
+    def list_readmes_to_load(self):
+        """
+        Lists the current Readmes that have been saved to Google Sheets
+        """
+
+        all_readme_sheets = SHEET.worksheets()
+        menu = {
+            "prompt": "Which README would you like to load:",
+            "type": "choice",
+            "options": {}
+        }
+
+        for count, value in enumerate(all_readme_sheets):
+            menu["options"][str(count + 1)] = {
+                "prompt": value.title,
+                "action": self.load_readme
+            }
+
+        response = self.menu_handler.process_menu(menu)
+
+        menu.get('options').get(response).get('action')()
+        
+
 
 
 def main():
