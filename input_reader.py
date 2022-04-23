@@ -41,9 +41,9 @@ class InputReader:
                     line = input()
                 except EOFError:
                     break
-                
+
                 input_text += '\n' + line
-            
+
         else:
             input_text = input()
 

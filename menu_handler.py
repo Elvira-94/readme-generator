@@ -48,7 +48,6 @@ class MenuHandler:
 
         return response
 
-
     def display_menu(self, menu):
         """
         Displays menu prompts in the terminal in standardised format
