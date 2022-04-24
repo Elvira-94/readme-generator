@@ -111,7 +111,8 @@ def display_menu(menu):
 def parse_menu_response(menu):
     """
     Parses the input from the user in response to a menu's prompt
-    Ensures that the input is of a correct format and appropriate for the type of prompt given
+    Ensures that the input is of a correct format and appropriate for the type
+    of prompt given
 
     Parameters:
         menu (dict): Dictionary outlining the structure of the menu
