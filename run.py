@@ -86,22 +86,19 @@ class Session:
             self.get_current_readme().display_menu()
 
         else:
-            menu = {
-                "prompt": "What would you like to do:",
-                "type": "choice",
-                "options": {
-                    "1": {
-                        "prompt": "Create New README File",
-                        "action": self.create_new_readme
-                    },
-                    "2": {
-                        "prompt": "Load Previous README File",
-                        "action": self.list_readmes_to_load
-                    },
-                    "3": {
-                        "prompt": "Exit",
-                        "action": exit
-                    }
+            menu = menu_helpers.CHOICE_MENU_PROMPT
+            menu.options = {
+                "1": {
+                    "prompt": "Create New README File",
+                    "action": self.create_new_readme
+                },
+                "2": {
+                    "prompt": "Load Previous README File",
+                    "action": self.list_readmes_to_load
+                },
+                "3": {
+                    "prompt": "Exit",
+                    "action": exit
                 }
             }
 

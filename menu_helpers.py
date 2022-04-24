@@ -11,6 +11,13 @@ import os
 from colorama import Fore
 
 
+CHOICE_MENU_PROMPT = {
+    "prompt": "What would you like to do:",
+    "type": "choice",
+    "options": {}
+}
+
+
 def clear_screen():
     """
     Uses the OS 'clear' command to clear the terminal window.

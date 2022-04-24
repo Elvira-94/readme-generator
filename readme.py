@@ -43,26 +43,23 @@ class Readme:
         attached to the active session
         """
 
-        menu = {
-            "prompt": "What would you like to do:",
-            "type": "choice",
-            "options": {
-                "1": {
-                    "prompt": "Add Section",
-                    "action": self.add_section
-                },
-                "2": {
-                    "prompt": "View Readme",
-                    "action": self.preview_readme
-                },
-                "3": {
-                    "prompt": "Create Readme File",
-                    "action": self.output_to_file
-                },
-                "4": {
-                    "prompt": "Return to Main Menu",
-                    "action": self.detach_from_session
-                }
+        menu = menu_helpers.CHOICE_MENU_PROMPT
+        menu.options = {
+            "1": {
+                "prompt": "Add Section",
+                "action": self.add_section
+            },
+            "2": {
+                "prompt": "View Readme",
+                "action": self.preview_readme
+            },
+            "3": {
+                "prompt": "Create Readme File",
+                "action": self.output_to_file
+            },
+            "4": {
+                "prompt": "Return to Main Menu",
+                "action": self.detach_from_session
             }
         }
 
