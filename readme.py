@@ -192,5 +192,18 @@ class Readme:
         Calls self.output_raw and wries the results to a README file locally.
         This will only be useful if code is being ran loally and not in Heroku
         """
-        with open("Generated_README.md", "w", encoding="utf-8") as file:
+        file_name = self.title + '_README.md'
+
+        with open(file_name, "w", encoding="utf-8") as file:
             file.write(self.output_raw())
+
+        menu_helpers.clear_screen()
+
+        print(
+            Fore.GREEN +
+            f"File '{file_name}' created." +
+            "\nPress enter to return to the menu." +
+            Fore.WHITE
+        )
+
+        input()
