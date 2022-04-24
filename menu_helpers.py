@@ -9,10 +9,6 @@ the users response to the menu prompts.
 
 import os
 from colorama import Fore
-from input_reader import InputReader
-
-
-input_reader = InputReader()
 
 
 def clear_screen():
@@ -141,7 +137,7 @@ def parse_menu_response(menu):
 
     """
     print(Fore.YELLOW + "\n\nEnter Your Input Below:" + Fore.WHITE)
-    user_input = input_reader.read_input(menu.get('multiline'))
+    user_input = read_input(menu.get('multiline'))
 
     if menu.get('type') == 'choice':
         response = handle_choice_response(menu, user_input)
