@@ -31,8 +31,6 @@ def start_animation():
     Animation shown at the launch of the app. Waits 2 seconds before
     clearing
     """
-    menu_helpers.clear_screen()
-    print(Fore.GREEN)
 
     #         _____  ______          _____  __  __ ______
     #         |  __ \|  ____|   /\   |  __ \|  \/  |  ____|
@@ -46,6 +44,8 @@ def start_animation():
     # | |__| | |____| |\  | |____| | \ \ / ____ \| | | |__| | | \ \
     #  \_____|______|_| \_|______|_|  \_\/_/    \_\_|  \____/|_|  \_\
 
+    menu_helpers.clear_screen()
+    print(Fore.GREEN)
     print("           _____  ______          _____  __  __ ______")
     print("          |  __ \\|  ____|   /\\   |  __ \\|  \\/  |  ____|")
     print("          | |__) | |__     /  \\  | |  | | \\  / | |__")
@@ -205,8 +205,8 @@ class Session:
         """
         Instantiates a new readme object and assigns it to the current session
         """
-        print(Fore.YELLOW + "Project Name: " + Fore.WHITE)
-        project_name = input()
+        menu_helpers.clear_screen()
+        project_name = input(Fore.YELLOW + "Project Name: " + Fore.WHITE)
 
         readme_object = Readme(self, project_name)
         self.set_current_readme(readme_object)
