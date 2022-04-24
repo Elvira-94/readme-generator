@@ -26,6 +26,85 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('readme_generator')
 
 
+def start_animation():
+    """
+    Animation shown at the launch of the app. Waits 2 seconds before
+    clearing
+    """
+    menu_helpers.clear_screen()
+    print(Fore.GREEN)
+
+    #         _____  ______          _____  __  __ ______
+    #         |  __ \|  ____|   /\   |  __ \|  \/  |  ____|
+    #         | |__) | |__     /  \  | |  | | \  / | |__
+    #         |  _  /|  __|   / /\ \ | |  | | |\/| |  __|
+    #         | | \ \| |____ / ____ \| |__| | |  | | |____
+    # _____ _|_|__\_\______/_/_ __\_\_____/|_|__|_|______|  _____
+    # / ____|  ____| \ | |  ____|  __ \     /\|__   __/ __ \|  __ \
+    # | |  __| |__  |  \| | |__  | |__) |  /  \  | | | |  | | |__) |
+    # | | |_ |  __| | . ` |  __| |  _  /  / /\ \ | | | |  | |  _  /
+    # | |__| | |____| |\  | |____| | \ \ / ____ \| | | |__| | | \ \
+    #  \_____|______|_| \_|______|_|  \_\/_/    \_\_|  \____/|_|  \_\
+
+    print("           _____  ______          _____  __  __ ______")
+    print("          |  __ \\|  ____|   /\\   |  __ \\|  \\/  |  ____|")
+    print("          | |__) | |__     /  \\  | |  | | \\  / | |__")
+    print("          |  _  /|  __|   / /\\ \\ | |  | | |\\/| |  __|")
+    print("          | | \\ \\| |____ / ____ \\| |__| | |  | | |____")
+    print("   _____ _|_|__\\_\\______/_/_ __\\_\\_____/|_|__|_|______|  _____")
+    print("  / ____|  ____| \\ | |  ____|  __ \\     /\\|__   __/ __ \\|  __ \\ ")
+    print(" | |  __| |__  |  \\| | |__  | |__) |   /  \\  | | | |  | | |__) |")
+    print(" | | |_ |  __| | . \\ |  __| |  _  /   / /\\ \\ | | | |  | |  _  / ")
+    print(" | |__| | |____| |\\  | |____| | \\ \\  / ____ \\| | | |__| | | \\ \\ ")
+    print("  \\_____|______|_| \\_|______|_|  \\_\\/_/    \\_\\_|  \\____/|_|  \\_\\")
+    print("                                                                ")
+    print("                                                                ")
+    print("                           LOADING...                           ")
+    print(Fore.WHITE)
+    time.sleep(2)
+    menu_helpers.clear_screen()
+
+
+def exit_animation():
+    """
+    Displays an exit message to the user, waits for 2 seconds
+    before clearing
+    """
+
+    #  ______                 _ _                _
+    # /  ____|               | | |              | |
+    # | |  __  ___   ___   __| | |__  _   _  ___| |
+    # | | |_ |/ _ \ / _ \ / _` | '_ \| | | |/ _ \ |
+    # | |__| | (_) | (_) | (_| | |_) | |_| |  __/_|
+    # \______|\___/ \___/ \__,_|_.__/ \__, |\___(_)
+    #                                  __/ |
+    #                                 |___/
+
+    menu_helpers.clear_screen()
+    print(Fore.GREEN)
+    print("   _____                 _ _                _ ")
+    print("  / ____|               | | |              | |")
+    print(" | |  __  ___   ___   __| | |__  _   _  ___| |")
+    print(" | | |_ |/ _ \\ / _ \\ / _  | '_ \\| | | |/ _ \\ |")
+    print(" | |__| | (_) | (_) | (_| | |_) | |_| |  __/_|")
+    print("  \\_____|\\___/ \\___/ \\__,_|_.__/ \\__, |\\___(_)")
+    print("                                  __/ |       ")
+    print("                                 |___/        ")
+    print(Fore.WHITE)
+    time.sleep(2)
+    menu_helpers.clear_screen()
+
+
+def exit_app():
+    """
+    Displays an exit message to the user and exits the app
+    once complete
+    """
+
+    exit_animation()
+    sys.exit()
+
+
 class Session:
     """
     A class to a represent a user's current session in the tool.
@@ -65,33 +144,13 @@ class Session:
     def __init__(self):
         self.current_readme = None
 
-    def start_animation(self):
-        menu_helpers.clear_screen()
-        print(Fore.GREEN)
-        print("           _____  ______          _____  __  __ ______          ")
-        print("          |  __ \|  ____|   /\   |  __ \|  \/  |  ____|         ")
-        print("          | |__) | |__     /  \  | |  | | \  / | |__            ")
-        print("          |  _  /|  __|   / /\ \ | |  | | |\/| |  __|           ")
-        print("          | | \ \| |____ / ____ \| |__| | |  | | |____          ")
-        print("   _____ _|_|__\_\______/_/_ __\_\_____/|_|__|_|______|  _____  ")
-        print("  / ____|  ____| \ | |  ____|  __ \     /\|__   __/ __ \|  __ \ ")
-        print(" | |  __| |__  |  \| | |__  | |__) |   /  \  | | | |  | | |__) |")
-        print(" | | |_ |  __| | . \ |  __| |  _  /   / /\\ \\ | | | |  | |  _  / ")
-        print(" | |__| | |____| |\  | |____| | \ \  / ____ \| | | |__| | | \ \ ")
-        print("  \_____|______|_| \_|______|_|  \_\/_/    \_\_|  \____/|_|  \_\\")
-        print("                                                                ")
-        print("                                                                ")
-        print(Fore.WHITE)
-        time.sleep(2)
-        menu_helpers.clear_screen()
-
     def start(self):
         """
         Handles main logic of the tool once a session starts.
 
         1. Show main menu loop
         """
-        self.start_animation()
+        start_animation()
 
         while True:
             self.main_menu()
@@ -122,7 +181,7 @@ class Session:
                 },
                 "3": {
                     "prompt": "Exit",
-                    "action": self.exit
+                    "action": exit_app
                 }
             }
 
@@ -189,27 +248,6 @@ class Session:
 
         menu.get('options').get(response)\
             .get('action')(menu.get('options').get(response).get('prompt'))
-
-    def exit(self):
-        """
-        Displays an exit message to the user, waits for 2 seconds
-        and exits the app
-        """
-
-        menu_helpers.clear_screen()
-        print(Fore.GREEN)
-        print("   _____                 _ _                _ ")
-        print("  / ____|               | | |              | |")
-        print(" | |  __  ___   ___   __| | |__  _   _  ___| |")
-        print(" | | |_ |/ _ \ / _ \ / _  | '_ \| | | |/ _ \ |")
-        print(" | |__| | (_) | (_) | (_| | |_) | |_| |  __/_|")
-        print("  \\_____|\\___/ \\___/ \\__,_|_.__/ \\__, |\\___(_)")
-        print("                                  __/ |       ")
-        print("                                 |___/        ")
-        print(Fore.WHITE)
-        time.sleep(2)
-        menu_helpers.clear_screen()
-        sys.exit()
 
 
 def main():
