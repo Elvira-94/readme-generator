@@ -9,8 +9,8 @@ import gspread
 from colorama import Fore
 from google.oauth2.service_account import Credentials
 
+import menu_helpers
 from readme import Readme
-from menu_handler import MenuHandler
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -62,7 +62,6 @@ class Session:
 
     def __init__(self):
         self.current_readme = None
-        self.menu_handler = MenuHandler()
 
     def start(self):
         """
@@ -106,7 +105,7 @@ class Session:
                 }
             }
 
-            response = self.menu_handler.process_menu(menu)
+            response = menu_helpers.process_menu(menu)
 
             menu.get('options').get(response).get('action')()
 
@@ -129,7 +128,7 @@ class Session:
         print(Fore.YELLOW + "Project Name: " + Fore.WHITE)
         project_name = input()
 
-        readme_object = Readme(self, project_name, self.menu_handler)
+        readme_object = Readme(self, project_name)
         self.set_current_readme(readme_object)
 
     def load_readme(self, readme_name):
@@ -139,7 +138,7 @@ class Session:
         to create appropriate section objects
         """
 
-        readme = Readme(self, readme_name, self.menu_handler)
+        readme = Readme(self, readme_name)
 
         worksheet = SHEET.worksheet(readme_name)
 
@@ -165,7 +164,7 @@ class Session:
                 "action": self.load_readme
             }
 
-        response = self.menu_handler.process_menu(menu)
+        response = menu_helpers.process_menu(menu)
 
         menu.get('options').get(response)\
             .get('action')(menu.get('options').get(response).get('prompt'))

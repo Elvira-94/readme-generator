@@ -4,6 +4,8 @@ This module contais the ReadMe class definition
 
 from colorama import Fore
 import sections
+import menu_helpers
+
 
 class Readme:
     """
@@ -22,7 +24,7 @@ class Readme:
         Adds a section of a given type to the readme object
     """
 
-    def __init__(self, session, title, menu_handler):
+    def __init__(self, session, title):
         self.session = session
         self.title = title
         self.sections = {}
@@ -33,7 +35,6 @@ class Readme:
             'User Experience': sections.UserExperienceSection
         }
 
-        self.menu_handler = menu_handler
         self.intro_section = None
 
     def display_menu(self):
@@ -65,7 +66,7 @@ class Readme:
             }
         }
 
-        response = self.menu_handler.process_menu(menu)
+        response = menu_helpers.process_menu(menu)
 
         menu.get('options').get(response).get('action')()
 
@@ -100,7 +101,7 @@ class Readme:
             }
         }
 
-        response = self.menu_handler.process_menu(menu)
+        response = menu_helpers.process_menu(menu)
 
         # If a section has already been created before, call that
         # section object rather than creating a new one

@@ -1,4 +1,5 @@
 from colorama import Fore
+import menu_helpers
 
 class Section:
     """
@@ -26,7 +27,7 @@ class Section:
     def display_menu(self):
 
         for question_index in self.questions_dict:
-            self.readme.menu_handler.clear_screen()
+            menu_helpers.clear_screen()
             if self.questions_dict[question_index].get('custom_handling'):
                 self.questions_dict[question_index]['setter_function']()
             else:
@@ -38,5 +39,5 @@ class Section:
                         print('\n' + Fore.MAGENTA + 'Current Value: ' + Fore.LIGHTMAGENTA_EX + preview + Fore.WHITE)
                         print(Fore.MAGENTA + 'Leave input blank to not modify current value.' + Fore.WHITE)
 
-                answer = self.readme.menu_handler.input_reader.read_input(self.questions_dict[question_index]['multiline'])
+                answer = menu_helpers.input_reader.read_input(self.questions_dict[question_index]['multiline'])
                 self.questions_dict[question_index]['setter_function'](answer)
