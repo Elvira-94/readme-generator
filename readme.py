@@ -44,7 +44,7 @@ class Readme:
         """
 
         menu = menu_helpers.CHOICE_MENU_PROMPT
-        menu.options = {
+        menu['options'] = {
             "1": {
                 "prompt": "Add Section",
                 "action": self.add_section

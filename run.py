@@ -87,7 +87,7 @@ class Session:
 
         else:
             menu = menu_helpers.CHOICE_MENU_PROMPT
-            menu.options = {
+            menu['options'] = {
                 "1": {
                     "prompt": "Create New README File",
                     "action": self.create_new_readme
