@@ -1,6 +1,18 @@
+"""
+This module represents the User Experience section of the README
+
+It contains information related to how the app caters to its user,
+such as who the intended users are, the purpose of the app for the
+users, things the users can do with the app, and the flow of the
+app
+"""
+
 from colorama import Fore
 from tabulate import tabulate
+
+import menu_helpers
 from .section import Section
+
 
 class UserExperienceSection(Section):
     """
@@ -46,6 +58,10 @@ class UserExperienceSection(Section):
         super().__init__(readme, questions_dict, header="User Experience")
 
     def set_site_aims(self, site_aims):
+        """
+        Sets the site_aims attribute. Each newline entered by the
+        user is treated as an individual site aim
+        """
 
         aims_split = site_aims.split('\n')
         for aim in aims_split:
@@ -53,6 +69,10 @@ class UserExperienceSection(Section):
                 self.site_aims.append(aim)
 
     def output_site_aims(self):
+        """
+        Outputs the site_aims attribute in GitHub Markdown format
+        """
+
         output = "### Site Aims\n\n"
 
         for aim in self.site_aims:
@@ -62,6 +82,10 @@ class UserExperienceSection(Section):
         return output
 
     def set_target_audience(self, target_audience):
+        """
+        Sets the target_audience attribute. Each newline entered by the
+        user is treated as an individual target audience entry
+        """
 
         audience_split = target_audience.split('\n')
         for target in audience_split:
@@ -69,6 +93,9 @@ class UserExperienceSection(Section):
                 self.target_audience.append(target)
 
     def output_target_audience(self):
+        """
+        Outputs the target_audience attribute in GitHub Markdown format
+        """
 
         output = "### Target Audience\n\n"
 
@@ -79,15 +106,26 @@ class UserExperienceSection(Section):
         return output
 
     def set_user_stories(self):
+        """
+        Sets the target_audience attribute. Each newline entered by the
+        user is treated as an individual target audience entry
+        """
 
         while True:
+            print(Fore.YELLOW + "- Site Aims -\n\n" + Fore.WHITE)
+
             print(Fore.YELLOW + "Action:" + Fore.WHITE)
             action = input()
             print(Fore.YELLOW + "Goal:" + Fore.WHITE)
             goal = input()
 
-            confirmed = input('Confirm Story [Y/N]: \n').upper()
-            while confirmed != 'Y' and confirmed != 'N':
+            confirmed = input(
+                Fore.GREEN +
+                '\n\nConfirm Story [Y/N]: \n' +
+                Fore.WHITE
+            ).upper()
+
+            while confirmed not in ('Y', 'N'):
                 print('Please try again...')
                 confirmed = input('Confirm Story [Y/N]: \n')
 
@@ -97,27 +135,46 @@ class UserExperienceSection(Section):
                     'goal': goal
                 })
 
-            again = input('Add another story [Y/N]: \n').upper()
-            while again != 'Y' and again != 'N':
+            again = input(
+                Fore.GREEN +
+                'Add another story [Y/N]: \n' +
+                Fore.WHITE
+            ).upper()
+
+            while again not in ('Y', 'N'):
                 print('Please try again...')
                 again = input('Add another story [Y/N]:  \n')
 
             if again == 'N':
                 break
-        
+
+            menu_helpers.clear_screen()
+
     def output_user_stories(self):
+        """
+        Outputs the user_stories attribute in GitHub Markdown format
+        using tabulate library to format the table
+        """
+
         headers = ["ID", "GOAL", "ACTION"]
         rows = []
 
-        for i in range(len(self.user_stories)):
-            rows.append([i+1, self.user_stories[i]['goal'], self.user_stories[i]['action']])
+        for count, value in enumerate(self.user_stories):
+            rows.append([count + 1, value['goal'], value['action']])
 
         return tabulate(rows, headers=headers, tablefmt="github")
-    
+
     def set_flowchart(self, flowchart_path):
+        """
+        Sets the flowchart attribute.
+        """
+
         self.flowchart = flowchart_path
 
     def output_flowchart(self):
+        """
+        Outputs the flowchart attribute as an image in GitHub Markdown format
+        """
 
         output = "### Flowchart\n\n"
         output += f"![{self.readme.title} Flowchart](" \
@@ -126,6 +183,10 @@ class UserExperienceSection(Section):
         return output
 
     def output_raw(self):
+        """
+        Outputs the content of the section in GitHub markdown format
+        as expected for the README document structure
+        """
 
         header_raw = f"## {self.header}"
 
@@ -138,6 +199,12 @@ class UserExperienceSection(Section):
         return output
 
     def load_section(self, sheet_data):
+        """
+        Given data from a google spreadsheet readme, this
+        function reads the data for its attributes and populates
+        them
+        """
+
         for row in sheet_data:
             if row.get('Data Type') == 'aims':
                 self.site_aims.append(row.get('Value'))
