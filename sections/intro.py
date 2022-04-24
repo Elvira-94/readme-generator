@@ -1,4 +1,11 @@
+"""
+This module represents the Introduction of the README
+It contains information about the project allows the reader
+to access the project.
+"""
+
 from .section import Section
+
 
 class IntroSection(Section):
     """
@@ -51,38 +58,74 @@ class IntroSection(Section):
         super().__init__(readme, questions_dict, header="Introduction")
 
     def set_description(self, description):
+        """
+        Sets the description attribute
+        """
+
         if description:
             self.description = description
 
     def get_descrption(self):
+        """
+        Returns the description attribute
+        """
+
         return self.description
 
     def set_demo_link(self, demo_link):
+        """
+        Sets the demo_link attribute
+        """
+
         if demo_link:
             self.demo_link = demo_link
 
     def get_demo_link(self):
+        """
+        Returns the demo_link attribute
+        """
+
         return self.demo_link
 
     def set_intro_image(self, intro_image_path):
+        """
+        Sets the intro_image attribute
+        """
+
         if intro_image_path:
             self.intro_image = intro_image_path
 
     def get_intro_image(self):
+        """
+        Returns the intro_image attribute
+        """
+
         return self.intro_image
 
     def output_raw(self):
+        """
+        Outputs the content of the section in GitHub markdown format
+        as expected for the README document structure
+        """
+
         header_raw = f"## {self.header}"
+
         demo_link_raw = "You can view the live project here: " + \
             f"<a href='{self.demo_link}' target='_blank' rel='noopener'>" + \
             f"{self.readme.title}</a>"
 
-        output = header_raw + "\n\n" + self.description + \
-            "\n\n" + demo_link_raw + "\n\n"
+        output = header_raw + "\n\n" + \
+            self.description + "\n\n" + \
+            demo_link_raw + "\n\n"
 
         return output
 
     def load_section(self, sheet_data):
+        """
+        Given data from a google spreadsheet readme, this
+        function reads the data for its attributes and populates
+        them
+        """
 
         for row in sheet_data:
             if row.get('Data Type') == 'description':

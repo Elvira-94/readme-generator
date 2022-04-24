@@ -6,6 +6,7 @@ common to each section and is inherited by them.
 from colorama import Fore
 import menu_helpers
 
+
 class Section:
     """
     A class to a represent generic document section.
@@ -68,8 +69,8 @@ class Section:
                     preview = self.questions_dict[question_index]\
                         .get('preview_function')()
 
-                    # If preview has data, it means there was a previous value set for
-                    # this data point
+                    # If preview has data, it means there was a previous value
+                    # set for this data point
                     if preview:
                         print(
                             '\n' +
