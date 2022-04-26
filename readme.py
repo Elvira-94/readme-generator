@@ -92,8 +92,8 @@ class Readme:
                     "mapping": sections.UserExperienceSection
                 },
                 "3": {
-                    "prompt": "Testing",
-                    "mapping": "Testing"
+                    "prompt": "Features",
+                    "mapping": sections.FeaturesSection
                 }
             }
         }
