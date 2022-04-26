@@ -83,40 +83,79 @@ class FeaturesSection(Section):
         allows the user to re-enter feature info
         """
 
-        menu_helpers.clear_screen()
-        self.view_all_features(pause=False, detailed=False)
-
-        print(
-            Fore.YELLOW +
-            '\nWhich feature would you like to edit?' +
-            Fore.WHITE
-        )
-        response = input()
-        print(len(self.features))
-        print(int(response))
-        if int(response)-1 in range(len(self.features)):
+        if len(self.features) == 0:
             menu_helpers.clear_screen()
-            feature_to_edit = self.get_feature(int(response)-1)
+            print(
+                Fore.RED +
+                "This readme currently has no features. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
 
-            print(feature_to_edit.output_raw())
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_features(pause=False, detailed=False)
 
             print(
                 Fore.YELLOW +
-                'Is this the feature you wish to edit? [Y/N]' +
+                '\nWhich feature would you like to edit?' +
                 Fore.WHITE
             )
+            response = input()
 
-            confirmed = input().upper()
+            if int(response)-1 in range(len(self.features)):
 
-        
+                while True:
+                    menu_helpers.clear_screen()
+                    feature_to_edit = self.get_feature(int(response)-1)
+
+                    print(feature_to_edit.output_raw())
+
+                    print(
+                        Fore.YELLOW +
+                        'Is this the feature you wish to edit? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        feature_to_edit.edit_feature()
+                        return
+
     def get_feature(self, feature_index):
-        
+
         try:
             return self.features[feature_index]
         except ValueError:
             raise Exception('Invlid Index retrieving feature')
-    
+
     def view_all_features(self, pause=True, detailed=True):
+
+        if len(self.features) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no features. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
 
         menu_helpers.clear_screen()
         for i, item in enumerate(self.features):
@@ -189,12 +228,115 @@ class Feature(Section):
             2: {
                 "question": "Image path for this feature:",
                 "setter_function": self.add_image_path,
-                "multiline": False
+                "multiline": False,
+                "preview_function": self.get_image_path
             }
         }
 
         super().__init__(feature, questions_dict, header=feature_name)
         self.display_menu()
+
+    def edit_feature(self):
+        self.questions_dict = {
+            1: {
+                "question": "Feature Title:",
+                "setter_function": self.set_feature_name,
+                "multiline": False,
+                "preview_function": self.get_feature_name
+            },
+            2: {
+                "question": "Points of Note:",
+                "setter_function": self.edit_point_of_note,
+                "custom_handling": True
+            },
+            3: {
+                "question": "Image path for this feature:",
+                "setter_function": self.add_image_path,
+                "multiline": False,
+                "preview_function": self.get_image_path
+            }
+        }
+        self.display_menu()
+
+    def set_feature_name(self, name):
+        self.feature_name = name
+
+    def get_feature_name(self):
+        return self.feature_name
+
+    def view_points_of_note(self, pause=False, detailed=False):
+
+        menu_helpers.clear_screen()
+        for i, item in enumerate(self.points_of_note):
+            print(
+                Fore.GREEN +
+                f"[{i+1}] {item}" +
+                Fore.WHITE
+            )
+
+            if detailed:
+                print(item.output_raw())
+
+        if pause:
+            input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
+
+    def edit_point_of_note(self):
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_points_of_note()
+
+            print(
+                Fore.YELLOW +
+                '\nWhich point would you like to edit? ' +
+                '(Simply press enter to skip)' +
+                Fore.WHITE
+            )
+            response = input()
+
+            if not response:
+                return
+
+            if int(response)-1 in range(len(self.points_of_note)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    point_to_edit = self.points_of_note[int(response)-1]
+
+                    print(point_to_edit)
+
+                    print(
+                        Fore.YELLOW +
+                        '\n\nIs this the point you wish to edit? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        menu_helpers.clear_screen()
+                        print(
+                            '\n' +
+                            Fore.MAGENTA +
+                            'Current Value: ' +
+                            Fore.LIGHTMAGENTA_EX +
+                            self.points_of_note[int(response)-1] +
+                            Fore.WHITE
+                        )
+
+                        print(
+                            Fore.YELLOW +
+                            '\n\nPlease enter a new value:' +
+                            Fore.WHITE
+                        )
+                        self.points_of_note[int(response)-1] = input(' -> ')
+                        return
 
     def add_point_of_note(self, point):
         """
