@@ -45,11 +45,11 @@ class FeaturesSection(Section):
             },
             "2": {
                 "prompt": "Edit feature",
-                "action": self.add_feature
+                "action": self.edit_feature
             },
             "3": {
                 "prompt": "View features",
-                "action": self.view_features
+                "action": self.view_all_features
             },
             "4": {
                 "prompt": "Return",
@@ -66,25 +66,67 @@ class FeaturesSection(Section):
             menu['options'].get(response)['action']()
 
     def add_feature(self):
+        """
+        Prompts the user for the name of a feature, creates the feature object
+        and assigns to the features class
+        """
+
         menu_helpers.clear_screen()
         feature_name = input(Fore.YELLOW + "Feature Name: " + Fore.WHITE)
         feature = Feature(self, feature_name)
 
         self.features.append(feature)
 
-    def view_features(self):
+    def edit_feature(self):
+
+        menu_helpers.clear_screen()
+        self.view_all_features(pause=False, detailed=False)
+
+        print(
+            Fore.YELLOW +
+            '\nWhich feature would you like to edit?' +
+            Fore.WHITE
+        )
+        response = input()
+        print(len(self.features))
+        print(int(response))
+        if int(response)-1 in range(len(self.features)):
+            menu_helpers.clear_screen()
+            feature_to_edit = self.get_feature(int(response)-1)
+
+            print(feature_to_edit.output_raw())
+
+            print(
+                Fore.YELLOW +
+                'Is this the feature you wish to edit? [Y/N]' +
+                Fore.WHITE
+            )
+
+            confirmed = input().upper()
+
+        
+    def get_feature(self, feature_index):
+        
+        try:
+            return self.features[feature_index]
+        except ValueError:
+            raise Exception('Invlid Index retrieving feature')
+    
+    def view_all_features(self, pause=True, detailed=True):
 
         menu_helpers.clear_screen()
         for i, item in enumerate(self.features):
             print(
-                Fore.YELLOW +
-                f"[{i}] {item}" +
+                Fore.GREEN +
+                f"[{i+1}] {item.feature_name}" +
                 Fore.WHITE
             )
+            
+            if detailed:
+                print(item.output_raw())
 
-            print(item.output_raw())
-
-        input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
+        if pause:
+            input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
 
     def output_raw(self):
         """
@@ -209,9 +251,9 @@ class Feature(Section):
         as expected for the README document structure
         """
 
-        output = f'<p align="center"><img src="{self.get_image_path()}" \
-             width="50%" height="50%" alt="{self.get_image_alt()}"></p>\
-            <br />\n'
+        output = f'<p align="center"><img src="{self.get_image_path()} ' +\
+            f'width="50%" height="50%" alt="{self.get_image_alt()}"></p>' +\
+            '<br />\n'
 
         return output
 
@@ -223,7 +265,7 @@ class Feature(Section):
         while True:
             print(Fore.YELLOW + "- Feature points of note -\n\n" + Fore.WHITE)
 
-            point = input(Fore.YELLOW + " ->" + Fore.WHITE)
+            point = input(Fore.YELLOW + " -> " + Fore.WHITE)
 
             self.add_point_of_note(point)
 
