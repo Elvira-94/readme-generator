@@ -29,7 +29,7 @@ class FeaturesSection(Section):
 
         self.features = []
 
-        super().__init__(readme, questions_dict, header="User Experience")
+        super().__init__(readme, questions_dict, header="Features")
 
     def set_features(self):
         """
@@ -74,6 +74,7 @@ class FeaturesSection(Section):
         menu_helpers.clear_screen()
         feature_name = input(Fore.YELLOW + "Feature Name: " + Fore.WHITE)
         feature = Feature(self, feature_name)
+        feature.display_menu()
 
         self.features.append(feature)
 
@@ -150,6 +151,7 @@ class FeaturesSection(Section):
                 "This readme currently has no features. Please add some!"
                 + Fore.WHITE
             )
+
             input(
                 Fore.YELLOW +
                 "Press enter to continue.."
@@ -164,7 +166,7 @@ class FeaturesSection(Section):
                 f"[{i+1}] {item.feature_name}" +
                 Fore.WHITE
             )
-            
+
             if detailed:
                 print(item.output_raw())
 
@@ -179,33 +181,50 @@ class FeaturesSection(Section):
 
         header_raw = f"## {self.header}"
 
-        output = header_raw + "\n\n" \
-            + self.features + "\n\n"
+
+        output = header_raw + "\n\n" 
+
+        for feature in self.features:
+            output += feature.output_raw()
 
         return output
 
-    # def load_section(self, sheet_data):
-    #     """
-    #     Given data from a google spreadsheet readme, this
-    #     function reads the data for its attributes and populates
-    #     them
-    #     """
+    def load_section(self, sheet_data):
+        """
+        Given data from a google spreadsheet readme, this
+        function reads the data for its attributes and populates
+        them
+        """
 
-    #     for row in sheet_data:
-    #         if row.get('Data Type') == 'aims':
-    #             self.site_aims.append(row.get('Value'))
-    #         elif row.get('Data Type') == 'target_audience':
-    #             self.target_audience.append(row.get('Value'))
-    #         elif row.get('Data Type') == 'user_stories':
-    #             goal = row.get('Value').split('|')[0]
-    #             action = row.get('Value').split('|')[1]
+        # Combine data for individual features where Data Type shows
+        # the relation between features
+        #
+        # E.g.
+        #
+        # Section Type |    Data Type   | Value
+        #    Feature   | 1 | image_path | image.png
+        #
+        features = {}
+        for row in sheet_data:
+            feature_split = row.get('Data Type').split('|')
 
-    #             self.user_stories.append({
-    #                 "goal": goal,
-    #                 "action": action
-    #             })
-    #         elif row.get('Data Type') == 'flowchart':
-    #             self.flowchart = row.get('Value')
+            if not features.get(feature_split[0]):
+                features[feature_split[0]] = {}
+
+            if feature_split[1] == 'point_of_note':
+                if features[feature_split[0]].get(feature_split[1]):
+                    features[feature_split[0]][feature_split[1]].append(row.get('Value'))
+                else:
+                    features[feature_split[0]][feature_split[1]] = [row.get('Value')]
+            else:
+                features[feature_split[0]][feature_split[1]] = row.get('Value')
+
+        for key, item in features.items():
+            print(key)
+            print(item)
+            feature = Feature(self, item.get('feature_name'))
+            feature.load_feature(item)
+            self.features.append(feature)
 
 
 class Feature(Section):
@@ -234,7 +253,6 @@ class Feature(Section):
         }
 
         super().__init__(feature, questions_dict, header=feature_name)
-        self.display_menu()
 
     def edit_feature(self):
         self.questions_dict = {
@@ -441,8 +459,19 @@ class Feature(Section):
 
         output = ""
 
-        output += f"### {self.feature_name}:**\n\n"
+        output += f"### {self.feature_name}:\n\n"
         output += self.output_points_of_note()
-        output += f"\n{self.output_image_path()}"
+        output += f"\n{self.output_image_path()}\n\n"
 
         return output
+
+    def load_feature(self, feature_json):
+        if feature_json.get('feature_name'):
+            self.set_feature_name(feature_json['feature_name'])
+
+        if feature_json.get('point_of_note'):
+            for point in feature_json.get('point_of_note'):
+                self.add_point_of_note(point)
+
+        if feature_json.get('image_path'):
+            self.add_image_path(feature_json['image_path'])
