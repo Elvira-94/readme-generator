@@ -70,7 +70,7 @@ class FeaturesSection(Section):
         Prompts the user for the name of a feature, creates the feature object
         and assigns to the features class
         """
-
+        
         menu_helpers.clear_screen()
         feature_name = input(Fore.YELLOW + "Feature Name: " + Fore.WHITE)
         feature = Feature(self, feature_name)
