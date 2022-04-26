@@ -32,7 +32,8 @@ class Readme:
 
         self.section_types = {
             'Introduction': sections.IntroSection,
-            'User Experience': sections.UserExperienceSection
+            'User Experience': sections.UserExperienceSection,
+            'Features': sections.FeaturesSection
         }
 
         self.intro_section = None
