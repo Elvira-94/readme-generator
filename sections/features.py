@@ -70,7 +70,7 @@ class FeaturesSection(Section):
         Prompts the user for the name of a feature, creates the feature object
         and assigns to the features class
         """
-        
+
         menu_helpers.clear_screen()
         feature_name = input(Fore.YELLOW + "Feature Name: " + Fore.WHITE)
         feature = Feature(self, feature_name)
@@ -78,6 +78,10 @@ class FeaturesSection(Section):
         self.features.append(feature)
 
     def edit_feature(self):
+        """
+        Prompts the user to choose a feature to edit, and once chosen
+        allows the user to re-enter feature info
+        """
 
         menu_helpers.clear_screen()
         self.view_all_features(pause=False, detailed=False)
