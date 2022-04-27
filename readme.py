@@ -24,11 +24,12 @@ class Readme:
         Adds a section of a given type to the readme object
     """
 
-    def __init__(self, session, title):
+    def __init__(self, session, title, worksheet):
         self.session = session
         self.title = title
         self.sections = {}
         self.image_path = ""
+        self.worksheet = worksheet
 
         self.section_types = {
             'Introduction': sections.IntroSection,
@@ -114,7 +115,18 @@ class Readme:
                 menu.get('options').get(response).get('prompt')
             ] = section
 
-    def load_sections(self, worksheet):
+    def find_next_empty_sheet_row(self):
+        """
+        Gathers all rows from a worksheet and returns the index
+        of the next empty row for appending
+        """
+
+        last_row = self.worksheet.row_count
+
+        # Add 1 for the next empty row
+        return last_row + 1
+
+    def load_sections(self):
         """
         Given a google worksheet object, build section objects accordingly
         and attach them to the current readme object
@@ -124,7 +136,7 @@ class Readme:
             Google sheets
         """
 
-        worksheet_data = worksheet.get_all_records()
+        worksheet_data = self.worksheet.get_all_records()
 
         section_records = {}
 

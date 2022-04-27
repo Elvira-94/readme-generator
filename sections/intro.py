@@ -64,6 +64,7 @@ class IntroSection(Section):
 
         if description:
             self.description = description
+            self.write_section_item_to_sheet('description', self.description)
 
     def get_descrption(self):
         """
@@ -79,6 +80,7 @@ class IntroSection(Section):
 
         if demo_link:
             self.demo_link = demo_link
+            self.write_section_item_to_sheet('demo_link', self.demo_link)
 
     def get_demo_link(self):
         """
@@ -94,6 +96,10 @@ class IntroSection(Section):
 
         if intro_image_path:
             self.intro_image = intro_image_path
+            self.write_section_item_to_sheet(
+                'intro_image_path',
+                self.intro_image
+            )
 
     def get_intro_image(self):
         """
@@ -134,3 +140,35 @@ class IntroSection(Section):
                 self.demo_link = row.get('Value')
             elif row.get('Data Type') == 'intro_image_path':
                 self.intro_image = row.get('Value')
+
+    def find_section_sheet_rows(self, item):
+        """
+        Finds the rows in the spreadsheet that correspond with the section type
+        """
+
+        section_matches = self.readme.worksheet.findall(
+            self.header,
+            in_column=1
+        )
+        found_row = None
+        for cell in section_matches:
+            if self.readme.worksheet.cell(cell.row, cell.col+1).value == item:
+                found_row = cell.row
+                break
+
+        return found_row
+
+    def write_section_item_to_sheet(self, item, value):
+        """
+        This function takes a given attribute and value and writes them
+        to the worksheet.
+
+        If a record for this item exists, it will overwrite it
+        or else it will add a row to the bottom of the worksheet
+        """
+
+        row = self.find_section_sheet_rows(item)
+        if not row:
+            row = self.readme.find_next_empty_sheet_row()
+
+        self.readme.worksheet.update_cell(row, 3, value)
