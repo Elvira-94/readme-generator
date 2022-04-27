@@ -181,8 +181,7 @@ class FeaturesSection(Section):
 
         header_raw = f"## {self.header}"
 
-
-        output = header_raw + "\n\n" 
+        output = header_raw + "\n\n"
 
         for feature in self.features:
             output += feature.output_raw()
@@ -220,8 +219,6 @@ class FeaturesSection(Section):
                 features[feature_split[0]][feature_split[1]] = row.get('Value')
 
         for key, item in features.items():
-            print(key)
-            print(item)
             feature = Feature(self, item.get('feature_name'))
             feature.load_feature(item)
             self.features.append(feature)
