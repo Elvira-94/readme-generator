@@ -121,10 +121,10 @@ class Readme:
         of the next empty row for appending
         """
 
-        last_row = self.worksheet.row_count
+        col_values = self.worksheet.col_values(1)
 
         # Add 1 for the next empty row
-        return last_row + 1
+        return len(col_values) + 1
 
     def load_sections(self):
         """
