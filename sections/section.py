@@ -92,3 +92,38 @@ class Section:
                 )
 
                 self.questions_dict[question_index]['setter_function'](answer)
+
+    def find_section_sheet_rows(self, item):
+        """
+        Finds the rows in the spreadsheet that correspond with the section type
+        """
+
+        section_matches = self.readme.worksheet.findall(
+            self.header,
+            in_column=1
+        )
+        found_row = None
+        for cell in section_matches:
+            if self.readme.worksheet.cell(cell.row, cell.col+1).value == item:
+                found_row = cell.row
+                break
+
+        return found_row
+
+    def write_section_item_to_sheet(self, item, value):
+        """
+        This function takes a given attribute and value and writes them
+        to the worksheet.
+
+        If a record for this item exists, it will overwrite it
+        or else it will add a row to the bottom of the worksheet
+        """
+
+        row = self.find_section_sheet_rows(item)
+        if not row:
+            row = self.readme.find_next_empty_sheet_row()
+        else:
+            self.readme.worksheet.update_cell(row, 1, self.header)
+            self.readme.worksheet.update_cell(row, 2, item)
+        print(row)
+        self.readme.worksheet.update_cell(row, 3, value)
