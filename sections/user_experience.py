@@ -161,8 +161,11 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
 
         stories_string = ""
-        for story in self.user_stories:
-            stories_string += story['goal'] + '|' + story['action'] + '\n'
+        for count, story in enumerate(self.user_stories):
+            if count == len(self.user_stories) - 1:
+                stories_string += story['goal'] + '|' + story['action']
+            else:
+                stories_string += story['goal'] + '|' + story['action'] + '\n'
 
         if write_to_sheet:
             self.write_section_item_to_sheet(
