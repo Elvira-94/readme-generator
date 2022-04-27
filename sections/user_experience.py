@@ -57,16 +57,19 @@ class UserExperienceSection(Section):
 
         super().__init__(readme, questions_dict, header="User Experience")
 
-    def set_site_aims(self, site_aims):
+    def set_site_aims(self, site_aims, write_to_sheet=True):
         """
         Sets the site_aims attribute. Each newline entered by the
         user is treated as an individual site aim
         """
+        if site_aims:
+            aims_split = site_aims.split('\n')
+            for aim in aims_split:
+                if aim:
+                    self.site_aims.append(aim)
 
-        aims_split = site_aims.split('\n')
-        for aim in aims_split:
-            if aim:
-                self.site_aims.append(aim)
+            if write_to_sheet:
+                self.write_section_item_to_sheet('aims', site_aims)
 
     def output_site_aims(self):
         """
@@ -81,16 +84,23 @@ class UserExperienceSection(Section):
 
         return output
 
-    def set_target_audience(self, target_audience):
+    def set_target_audience(self, target_audience, write_to_sheet=True):
         """
         Sets the target_audience attribute. Each newline entered by the
         user is treated as an individual target audience entry
         """
 
-        audience_split = target_audience.split('\n')
-        for target in audience_split:
-            if target:
-                self.target_audience.append(target)
+        if target_audience:
+            audience_split = target_audience.split('\n')
+            for target in audience_split:
+                if target:
+                    self.target_audience.append(target)
+
+            if write_to_sheet:
+                self.write_section_item_to_sheet(
+                    'target_audience',
+                    target_audience
+                )
 
     def output_target_audience(self):
         """
@@ -105,14 +115,14 @@ class UserExperienceSection(Section):
 
         return output
 
-    def set_user_stories(self):
+    def set_user_stories(self, write_to_sheet=True):
         """
         Sets the target_audience attribute. Each newline entered by the
         user is treated as an individual target audience entry
         """
 
         while True:
-            print(Fore.YELLOW + "- Site Aims -\n\n" + Fore.WHITE)
+            print(Fore.YELLOW + "- User Stories -\n\n" + Fore.WHITE)
 
             print(Fore.YELLOW + "Action:" + Fore.WHITE)
             action = input()
@@ -150,6 +160,16 @@ class UserExperienceSection(Section):
 
             menu_helpers.clear_screen()
 
+        stories_string = ""
+        for story in self.user_stories:
+            stories_string += story['goal'] + '|' + story['action'] + '\n'
+
+        if write_to_sheet:
+            self.write_section_item_to_sheet(
+                'user_stories',
+                stories_string
+            )
+
     def output_user_stories(self):
         """
         Outputs the user_stories attribute in GitHub Markdown format
@@ -164,12 +184,14 @@ class UserExperienceSection(Section):
 
         return tabulate(rows, headers=headers, tablefmt="github")
 
-    def set_flowchart(self, flowchart_path):
+    def set_flowchart(self, flowchart_path, write_to_sheet=True):
         """
         Sets the flowchart attribute.
         """
-
-        self.flowchart = flowchart_path
+        if flowchart_path:
+            self.flowchart = flowchart_path
+            if write_to_sheet:
+                self.write_section_item_to_sheet('flowchart', self.flowchart)
 
     def output_flowchart(self):
         """
@@ -207,16 +229,20 @@ class UserExperienceSection(Section):
 
         for row in sheet_data:
             if row.get('Data Type') == 'aims':
-                self.site_aims.append(row.get('Value'))
+                site_aims = row.get('Value')
+                self.set_site_aims(site_aims, write_to_sheet=False)
             elif row.get('Data Type') == 'target_audience':
-                self.target_audience.append(row.get('Value'))
+                target_audience = row.get('Value')
+                self.set_target_audience(target_audience, write_to_sheet=False)
             elif row.get('Data Type') == 'user_stories':
-                goal = row.get('Value').split('|')[0]
-                action = row.get('Value').split('|')[1]
+                stories = row.get('Value')
+                for story in stories.split('\n'):
+                    goal = story.split('|')[0]
+                    action = story.split('|')[1]
 
-                self.user_stories.append({
-                    "goal": goal,
-                    "action": action
-                })
+                    self.user_stories.append({
+                        "goal": goal,
+                        "action": action
+                    })
             elif row.get('Data Type') == 'flowchart':
-                self.flowchart = row.get('Value')
+                self.set_flowchart(row.get('Value'))
