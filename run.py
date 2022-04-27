@@ -207,9 +207,45 @@ class Session:
         """
         menu_helpers.clear_screen()
         project_name = input(Fore.YELLOW + "Project Name: " + Fore.WHITE)
-
-        readme_object = Readme(self, project_name)
+        try:
+            worksheet = self.create_worksheet(project_name)
+        except Exception as err:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                str(err) +
+                Fore.WHITE
+            )
+            print(
+                Fore.YELLOW +
+                "\n\nPress enter to continue.." +
+                Fore.WHITE
+            )
+            input()
+            return
+        readme_object = Readme(
+            self,
+            project_name,
+            worksheet
+        )
         self.set_current_readme(readme_object)
+
+    def create_worksheet(self, readme_title):
+        """
+        Creates and returns a worksheet in the spreadsheet for a readme
+        """
+
+        # Check if the worksheet already exists
+        try:
+            SHEET.worksheet(readme_title)
+            raise Exception(
+                'A worksheet with this name already exists! Please try again'
+            )
+        except gspread.exceptions.WorksheetNotFound:
+            pass
+
+        worksheet = SHEET.add_worksheet(readme_title, 0, 3)
+        return worksheet
 
     def load_readme(self, readme_name):
         """
@@ -218,11 +254,11 @@ class Session:
         to create appropriate section objects
         """
 
-        readme = Readme(self, readme_name)
-
         worksheet = SHEET.worksheet(readme_name)
+        readme = Readme(self, readme_name, worksheet)
 
-        readme.load_sections(worksheet)
+        readme.find_next_empty_sheet_row()
+        readme.load_sections()
 
         self.set_current_readme(readme)
 
