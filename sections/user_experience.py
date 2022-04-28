@@ -594,8 +594,6 @@ class UserExperienceSection(Section):
 
                         return
 
-
-
     def load_target_audience(self, target_audience):
         """
         Sets the target_audience attribute. Each newline entered by the
@@ -642,6 +640,10 @@ class UserExperienceSection(Section):
                 "action": self.view_all_stories
             },
             "4": {
+                "prompt": "Delete story",
+                "action": self.delete_story
+            },
+            "5": {
                 "prompt": "Return",
                 "action": "break"
             }
@@ -650,7 +652,7 @@ class UserExperienceSection(Section):
         while True:
             response = menu_helpers.process_menu(menu)
 
-            if response == "4":
+            if response == "5":
                 break
 
             menu['options'].get(response)['action']()
@@ -814,6 +816,84 @@ class UserExperienceSection(Section):
                             )
 
                         return 
+
+    def delete_story(self, write_to_sheet=True):
+        """
+        Prompts the user to choose a story to edit, and once chosen
+        deletes the entry
+        """
+
+        if len(self.user_stories) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no stories. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_stories(pause=False)
+
+            print(
+                Fore.YELLOW +
+                '\nWhich story would you like to delete?' +
+                Fore.WHITE
+            )
+            
+            response = input()
+            
+            if int(response)-1 in range(len(self.user_stories)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    story_to_edit = self.user_stories[int(response)-1]
+
+                    print(
+                        Fore.GREEN + "Action: " + Fore.WHITE +
+                        "\n" + story_to_edit['action'] +
+                        Fore.GREEN + "Goal: " + Fore.WHITE +
+                        "\n" + story_to_edit['goal']
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\nIs this the story you wish to delete? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+
+                        del self.user_stories[int(response)-1]
+
+                        if write_to_sheet:
+                            stories_string = ""
+                            for count, story in enumerate(self.user_stories):
+                                if count == len(self.user_stories) - 1:
+                                    stories_string += story['goal'] + '|' + story['action']
+                                else:
+                                    stories_string += story['goal'] + '|' + story['action'] + '\n'
+
+                            self.write_section_item_to_sheet(
+                                'user_stories',
+                                stories_string
+                            )
+
+                        return
 
     def output_user_stories(self):
         """
