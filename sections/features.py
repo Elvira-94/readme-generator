@@ -73,7 +73,7 @@ class FeaturesSection(Section):
 
         menu_helpers.clear_screen()
         feature_name = input(Fore.YELLOW + "Feature Name: " + Fore.WHITE)
-        feature = Feature(self, feature_name)
+        feature = Feature(self, feature_name, len(self.features)+1)
         feature.display_menu()
 
         self.features.append(feature)
@@ -147,7 +147,8 @@ class FeaturesSection(Section):
 
     def view_all_features(self, pause=True, detailed=True):
         """
-        Displays all features to the terminal and awaits user confirmation before returning
+        Displays all features to the terminal and awaits user confirmation 
+        before returning
         """
 
         if len(self.features) == 0:
@@ -225,7 +226,7 @@ class FeaturesSection(Section):
                 features[feature_split[0]][feature_split[1]] = row.get('Value')
 
         for key, item in features.items():
-            feature = Feature(self, item.get('feature_name'))
+            feature = Feature(self, item.get('feature_name'), key, False)
             feature.load_feature(item)
             self.features.append(feature)
 
@@ -235,8 +236,9 @@ class Feature(Section):
     This class represents a single feature of the features section.
     """
 
-    def __init__(self, feature, feature_name):
-        self.feature_name = feature_name
+    def __init__(self, feature, feature_name, feature_number, write_to_file=True):
+        self.set_feature_name(feature_name, write_to_file)
+        self.feature_number = str(feature_number)
         self.points_of_note = []
         self.image_path = ""
         self.image_alt = ""
@@ -255,7 +257,7 @@ class Feature(Section):
             }
         }
 
-        super().__init__(feature, questions_dict, header=feature_name)
+        super().__init__(feature.readme, questions_dict, header=feature.header)
 
     def edit_feature(self):
         """
@@ -283,11 +285,19 @@ class Feature(Section):
         }
         self.display_menu()
 
-    def set_feature_name(self, name):
+    def set_feature_name(self, name, write_to_file=True):
         """
         Sets the feature_name attribute
         """
-        self.feature_name = name
+        if name:
+            self.feature_name = name
+
+            if write_to_file:
+
+                self.write_section_item_to_sheet(
+                    self.feature_number + '|feature_name',
+                    self.feature_name
+                )
 
     def get_feature_name(self):
         """
@@ -322,17 +332,22 @@ class Feature(Section):
         while True:
 
             menu_helpers.clear_screen()
-            self.view_points_of_note()
+            if self.points_of_note:
+                self.view_points_of_note()
 
-            print(
-                Fore.YELLOW +
-                '\nWhich point would you like to edit? ' +
-                '(Simply press enter to skip)' +
-                Fore.WHITE
-            )
-            response = input()
+                print(
+                    Fore.YELLOW +
+                    '\nWhich point would you like to edit? ' +
+                    '(Simply press enter to skip)' +
+                    Fore.WHITE
+                )
+                response = input()
 
-            if not response:
+                if not response:
+                    return
+
+            else:
+                self.add_points_of_note()
                 return
 
             if int(response)-1 in range(len(self.points_of_note)):
@@ -374,13 +389,26 @@ class Feature(Section):
                         Fore.WHITE
                     )
                     self.points_of_note[int(response)-1] = input(' -> ')
+
+                    points_string = ""
+                    for count, point in enumerate(self.points_of_note):
+                        if count == len(self.points_of_note) - 1:
+                            points_string += point
+                        else:
+                            points_string += point + '\n'
+
+                    self.write_section_item_to_sheet(
+                        self.feature_number + '|point',
+                        points_string
+                    )
                     return
 
     def add_point_of_note(self, point):
         """
         Adds an additional point to the feature
         """
-        self.points_of_note.append(point)
+        if point:
+            self.points_of_note.append(point)
 
     def output_points_of_note(self):
         """
@@ -401,12 +429,20 @@ class Feature(Section):
 
         del self.points_of_note[index_to_delete]
 
-    def add_image_path(self, image_path):
+    def add_image_path(self, image_path, write_to_file=True):
         """
         Sets the image path for the feature
         """
 
-        self.image_path = image_path
+        if image_path:
+
+            self.image_path = image_path
+
+            if write_to_file:
+                self.write_section_item_to_sheet(
+                    self.feature_number + '|image_path',
+                    self.image_path
+                )
 
     def get_image_path(self):
         """
@@ -441,7 +477,7 @@ class Feature(Section):
 
         return output
 
-    def add_points_of_note(self):
+    def add_points_of_note(self, write_to_file=True):
         """
         Asks the user for the points of note for the feature
         """
@@ -469,7 +505,23 @@ class Feature(Section):
             if again == 'N':
                 break
 
+            points_string = ""
+
             menu_helpers.clear_screen()
+
+        if write_to_file:
+            points_string = ""
+            for count, point in enumerate(self.points_of_note):
+                if count == len(self.points_of_note) - 1:
+                    points_string += point
+                else:
+                    points_string += point + '\n'
+
+            self.write_section_item_to_sheet(
+                self.feature_number + '|point',
+                points_string
+            )
+        return
 
     def output_raw(self):
         """
@@ -490,11 +542,11 @@ class Feature(Section):
         Loads feature attributes from worksheet data
         """
         if feature_json.get('feature_name'):
-            self.set_feature_name(feature_json['feature_name'])
+            self.set_feature_name(feature_json['feature_name'], write_to_file=False)
 
         if feature_json.get('point_of_note'):
             for point in feature_json.get('point_of_note'):
                 self.add_point_of_note(point)
 
         if feature_json.get('image_path'):
-            self.add_image_path(feature_json['image_path'])
+            self.add_image_path(feature_json['image_path'], write_to_file=False)
