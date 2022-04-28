@@ -81,11 +81,11 @@ def exit_animation():
 
     menu_helpers.clear_screen()
     print(Fore.GREEN)
-    print("   _____                 _ _                _ ")
+    print(Fore.LIGHTBLUE_EX + "   _____                 _ _                _ ")
     print("  / ____|               | | |              | |")
     print(" | |  __  ___   ___   __| | |__  _   _  ___| |")
     print(" | | |_ |/ _ \\ / _ \\ / _  | '_ \\| | | |/ _ \\ |")
-    print(" | |__| | (_) | (_) | (_| | |_) | |_| |  __/_|")
+    print(Fore.YELLOW + " | |__| | (_) | (_) | (_| | |_) | |_| |  __/_|")
     print("  \\_____|\\___/ \\___/ \\__,_|_.__/ \\__, |\\___(_)")
     print("                                  __/ |       ")
     print("                                 |___/        ")
