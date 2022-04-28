@@ -373,7 +373,7 @@ class UserExperienceSection(Section):
             },
             "4": {
                 "prompt": "Delete Target Audience",
-                "action": self.view_all_target_audiences
+                "action": self.delete_target_audience
             },
             "5": {
                 "prompt": "Return",
@@ -519,6 +519,82 @@ class UserExperienceSection(Section):
                             )
 
                         return
+
+    def delete_target_audience(self, write_to_sheet=True):
+        """
+        Prompts the user to choose a target audience to delete, and once chosen
+        deletes the entry
+        """
+
+        if len(self.target_audience) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no target audience. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_target_audiences(pause=False)
+
+            print(
+                Fore.YELLOW +
+                '\nWhich target audience would you like to delete?' +
+                Fore.WHITE
+            )
+            response = input()
+
+            if int(response)-1 in range(len(self.target_audience)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    target_audience_to_edit = self.target_audience[int(response)-1]
+
+                    print(
+                        Fore.BLUE + target_audience_to_edit + Fore.WHITE
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\nIs this the target audience you wish to delete? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        
+                        del self.target_audience[int(response)-1]
+
+                        if write_to_sheet:
+                            target_audience_string = ""
+                            for count, target_audience in enumerate(self.target_audience):
+                                if count == len(self.target_audience) - 1:
+                                    target_audience_string += target_audience
+                                else:
+                                    target_audience_string += target_audience + '\n'
+
+                            self.write_section_item_to_sheet(
+                                'target_audience',
+                                target_audience_string
+                            )
+
+                        return
+
+
 
     def load_target_audience(self, target_audience):
         """
