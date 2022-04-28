@@ -67,7 +67,164 @@ class UserExperienceSection(Section):
         else: 
             menu['options'].get(response, {})['action']()
 
-    def set_site_aims(self, site_aims, write_to_sheet=True):
+    def set_site_aims(self, write_to_sheet=True):
+        """
+        Sets the site_aims attribute. Each newline entered by the
+        user is treated as an individual site aim
+        """
+
+        menu = menu_helpers.CHOICE_MENU_PROMPT
+        menu['options'] = {
+            "1": {
+                "prompt": "Add Site Aim",
+                "action": self.add_site_aim
+            },
+            "2": {
+                "prompt": "Edit Site Aim",
+                "action": self.edit_site_aim
+            },
+            "3": {
+                "prompt": "View Site Aims",
+                "action": self.view_all_site_aims
+            },
+            "4": {
+                "prompt": "Delete Site Aim",
+                "action": self.delete_site_aim
+            },
+            "5": {
+                "prompt": "Return",
+                "action": "break"
+            }
+        }
+
+        while True:
+            response = menu_helpers.process_menu(menu)
+
+            if response == "5":
+                break
+
+            menu['options'].get(response)['action']()
+
+    def view_all_site_aims(self, pause=True):
+
+        if len(self.site_aims) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no site aims. Please add some!"
+                + Fore.WHITE
+            )
+
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        menu_helpers.clear_screen()
+        for i, item in enumerate(self.user_stories):
+            print('-------------------------\n')
+            print(Fore.BLUE + f'[{i+1}]: ' + item + Fore.WHITE)
+
+            # dont add a seperator if on the last story
+            if i == len(self.user_stories) - 1:
+                print('-------------------------\n\n')
+            else:
+                print('\n\n')
+
+        if pause:
+            input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
+
+    def add_site_aim(self, write_to_sheet=True):
+        """
+        Prompts the user for the goal and action of a user story
+        """
+
+        menu_helpers.clear_screen()
+        print(Fore.YELLOW + "Please enter the site aim to add: " + Fore.WHITE)
+        aim = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+        self.site_aims.append(aim)
+
+        if write_to_sheet:
+            aims_string = ""
+            for count, aim in enumerate(self.site_aims):
+                if count == len(self.site_aims) - 1:
+                    aims_string += aim
+                else:
+                    aims_string += aim + '\n'
+
+            self.write_section_item_to_sheet(
+                'site_aims',
+                aims_string
+            )
+
+    def edit_site_aim(self):
+        """
+        Prompts the user to choose an aim to edit, and once chosen
+        allows the user to re-enter aim info
+        """
+
+        if len(self.site_aims) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no site aims. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_site_aims(pause=False)
+
+            print(
+                Fore.YELLOW +
+                '\nWhich aim would you like to edit?' +
+                Fore.WHITE
+            )
+            response = input()
+
+            if int(response)-1 in range(len(self.site_aims)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    aim_to_edit = self.site_aims[int(response)-1]
+
+                    print(
+                        Fore.BLUE + aim_to_edit + Fore.WHITE
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\nIs this the aim you wish to edit? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        menu_helpers.clear_screen()
+                        print(Fore.YELLOW + "Please enter the new aim value:" + Fore.WHITE)
+                        aim = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+                        self.site_aims[int(response)-1] = aim
+
+                        return
+
+    def load_site_aims(self, site_aims):
         """
         Sets the site_aims attribute. Each newline entered by the
         user is treated as an individual site aim
@@ -78,8 +235,25 @@ class UserExperienceSection(Section):
                 if aim:
                     self.site_aims.append(aim)
 
-            if write_to_sheet:
-                self.write_section_item_to_sheet('aims', site_aims)
+    def load_user_stories(self, user_stories):
+        """
+        Sets the user_stories attribute. Each newline
+        is treated as an individual user story
+        """
+        for story in user_stories.split('\n'):
+            goal = story.split('|')[0]
+            action = story.split('|')[1]
+
+            self.user_stories.append({
+                "goal": goal,
+                "action": action
+            })
+
+    def load_flowchart(self, flowchart):
+        """
+        Sets the flowchart attribute
+        """
+        self.flowchart = flowchart
 
     def output_site_aims(self):
         """
@@ -94,7 +268,7 @@ class UserExperienceSection(Section):
 
         return output
 
-    def set_target_audience(self, target_audience, write_to_sheet=True):
+    def load_target_audience(self, target_audience):
         """
         Sets the target_audience attribute. Each newline entered by the
         user is treated as an individual target audience entry
@@ -105,12 +279,6 @@ class UserExperienceSection(Section):
             for target in audience_split:
                 if target:
                     self.target_audience.append(target)
-
-            if write_to_sheet:
-                self.write_section_item_to_sheet(
-                    'target_audience',
-                    target_audience
-                )
 
     def output_target_audience(self):
         """
@@ -366,19 +534,12 @@ class UserExperienceSection(Section):
         for row in sheet_data:
             if row.get('Data Type') == 'aims':
                 site_aims = row.get('Value')
-                self.set_site_aims(site_aims, write_to_sheet=False)
+                self.load_site_aims(site_aims)
             elif row.get('Data Type') == 'target_audience':
                 target_audience = row.get('Value')
-                self.set_target_audience(target_audience, write_to_sheet=False)
+                self.load_target_audience(target_audience)
             elif row.get('Data Type') == 'user_stories':
                 stories = row.get('Value')
-                for story in stories.split('\n'):
-                    goal = story.split('|')[0]
-                    action = story.split('|')[1]
-
-                    self.user_stories.append({
-                        "goal": goal,
-                        "action": action
-                    })
+                self.load_user_stories(stories)
             elif row.get('Data Type') == 'flowchart':
-                self.set_flowchart(row.get('Value'))
+                self.load_flowchart(row.get('Value'))
