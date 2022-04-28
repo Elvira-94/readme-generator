@@ -59,7 +59,7 @@ def start_animation():
     print("                                                                ")
     print("                                                                ")
     print(Fore.WHITE + "                           LOADING...                           ")
-    
+
     time.sleep(3)
     menu_helpers.clear_screen()
 
