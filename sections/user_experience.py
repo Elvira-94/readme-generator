@@ -27,35 +27,45 @@ class UserExperienceSection(Section):
     """
 
     def __init__(self, readme):
-        questions_dict = {
-            1: {
-                "question": "What are the aims of the site: ",
-                "setter_function": self.set_site_aims,
-                "multiline": True
-            },
-            2: {
-                "question": "Who is the target audience of the site:",
-                "setter_function": self.set_target_audience,
-                "multiline": True
-            },
-            3: {
-                "question": "Please Provide User Stories:",
-                "setter_function": self.set_user_stories,
-                "custom_handling": True
-            },
-            4: {
-                "question": "Please provide the path to your flowchart image:",
-                "setter_function": self.set_flowchart,
-                "multiline": False
-            }
-        }
 
         self.site_aims = []
         self.target_audience = []
         self.user_stories = []
         self.flowchart = None
 
-        super().__init__(readme, questions_dict, header="User Experience")
+        super().__init__(readme, {}, header="User Experience")
+
+    def display_menu(self):
+        menu = menu_helpers.CHOICE_MENU_PROMPT
+        menu['options'] = {
+            "1": {
+                "prompt": "Manage Site Aims",
+                "action": self.set_site_aims
+            },
+            "2": {
+                "prompt": "Manage Target Audience",
+                "action": self.set_target_audience
+            },
+            "3": {
+                "prompt": "Manage User Stories",
+                "action": self.set_user_stories
+            },
+            "4": {
+                "prompt": "Manage Flowchart Image Path",
+                "action": self.set_flowchart
+            },
+            "5": {
+                "prompt": "Return",
+                "action": "break"
+            }
+        }
+
+        response = menu_helpers.process_menu(menu)
+
+        if menu['options'].get(response, {})['action'] == 'break':
+            return
+        else: 
+            menu['options'].get(response, {})['action']()
 
     def set_site_aims(self, site_aims, write_to_sheet=True):
         """
