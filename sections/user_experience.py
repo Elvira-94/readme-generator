@@ -89,7 +89,7 @@ class UserExperienceSection(Section):
             },
             "4": {
                 "prompt": "Delete Site Aim",
-                "action": self.view_all_site_aims
+                "action": self.delete_site_aim
             },
             "5": {
                 "prompt": "Return",
@@ -219,6 +219,79 @@ class UserExperienceSection(Section):
                         aim = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
                         self.site_aims[int(response)-1] = aim
+
+                        if write_to_sheet:
+                            aims_string = ""
+                            for count, aim in enumerate(self.site_aims):
+                                if count == len(self.site_aims) - 1:
+                                    aims_string += aim
+                                else:
+                                    aims_string += aim + '\n'
+
+                            self.write_section_item_to_sheet(
+                                'aims',
+                                aims_string
+                            )
+
+                        return
+
+    def delete_site_aim(self, write_to_sheet=True):
+        """
+        Prompts the user to choose an aim to edit, and once chosen
+        allows the user to re-enter aim info
+        """
+
+        if len(self.site_aims) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no site aims. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_site_aims(pause=False)
+
+            print(
+                Fore.YELLOW +
+                '\nWhich aim would you like to delete?' +
+                Fore.WHITE
+            )
+            response = input()
+
+            if int(response)-1 in range(len(self.site_aims)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    aim_to_delete = self.site_aims[int(response)-1]
+
+                    print(
+                        Fore.BLUE + aim_to_delete + Fore.WHITE
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\nIs this the aim you wish to delete? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        del self.site_aims[int(response)-1]
 
                         if write_to_sheet:
                             aims_string = ""
