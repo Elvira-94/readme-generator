@@ -140,4 +140,3 @@ class IntroSection(Section):
                 self.demo_link = row.get('Value')
             elif row.get('Data Type') == 'intro_image_path':
                 self.intro_image = row.get('Value')
-
