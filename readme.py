@@ -56,7 +56,7 @@ class Readme:
                 "action": self.preview_readme
             },
             "3": {
-                "prompt": "Create Readme File",
+                "prompt": "[If running the tool locally!] Create Readme File",
                 "action": self.output_to_file
             },
             "4": {
