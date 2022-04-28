@@ -122,8 +122,7 @@ class Section:
         row = self.find_section_sheet_rows(item)
         if not row:
             row = self.readme.find_next_empty_sheet_row()
-        else:
             self.readme.worksheet.update_cell(row, 1, self.header)
             self.readme.worksheet.update_cell(row, 2, item)
-        print(row)
+
         self.readme.worksheet.update_cell(row, 3, value)

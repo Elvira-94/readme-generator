@@ -209,6 +209,9 @@ class Session:
         project_name = input(Fore.YELLOW + "Project Name: " + Fore.WHITE)
         try:
             worksheet = self.create_worksheet(project_name)
+            worksheet.update('A1', 'Section Type')
+            worksheet.update('B1', 'Data Type')
+            worksheet.update('C1', 'Value')
         except Exception as err:
             menu_helpers.clear_screen()
             print(
