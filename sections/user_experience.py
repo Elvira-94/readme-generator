@@ -976,9 +976,10 @@ class UserExperienceSection(Section):
         """
 
         output = "### Flowchart\n\n"
-        output += f"![{self.readme.title} Flowchart](" \
-            + self.flowchart \
-            + ")\n\n"
+
+        output += f'<p align="center"><img src="{self.flowchart}" ' +\
+            f'width="50%" alt="{self.readme.title} Flowchart"></p>' +\
+            '<br />\n\n'
         return output
 
     def output_raw(self):
