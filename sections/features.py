@@ -471,8 +471,8 @@ class Feature(Section):
         as expected for the README document structure
         """
 
-        output = f'<p align="center"><img src="{self.get_image_path()} ' +\
-            f'width="50%" height="50%" alt="{self.get_image_alt()}"></p>' +\
+        output = f'<p align="center"><img src="{self.get_image_path()}" ' +\
+            f'width="50%" alt="{self.get_image_alt()}"></p>' +\
             '<br />\n'
 
         return output

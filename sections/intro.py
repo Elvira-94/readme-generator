@@ -120,9 +120,14 @@ class IntroSection(Section):
             f"<a href='{self.demo_link}' target='_blank' rel='noopener'>" + \
             f"{self.readme.title}</a>"
 
+        intro_image_raw = f'<p align="center"><img src="{self.get_intro_image()}" ' +\
+            'width="50%" alt=""></p>' +\
+            '<br />\n'
+
         output = header_raw + "\n\n" + \
             self.description + "\n\n" + \
-            demo_link_raw + "\n\n"
+            demo_link_raw + "\n\n" + \
+            intro_image_raw + "\n\n"
 
         return output
 

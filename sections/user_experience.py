@@ -977,8 +977,8 @@ class UserExperienceSection(Section):
 
         output = "### Flowchart\n\n"
         output += f"![{self.readme.title} Flowchart](" \
-            + self.readme.image_path + '/' + self.flowchart \
-            + "})\n\n"
+            + self.flowchart \
+            + ")\n\n"
         return output
 
     def output_raw(self):
