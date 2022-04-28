@@ -117,61 +117,184 @@ class UserExperienceSection(Section):
 
     def set_user_stories(self, write_to_sheet=True):
         """
-        Sets the target_audience attribute. Each newline entered by the
-        user is treated as an individual target audience entry
+        Sets the site_aims attribute. Each newline entered by the
+        user is treated as an individual site aim
         """
 
+        menu = menu_helpers.CHOICE_MENU_PROMPT
+        menu['options'] = {
+            "1": {
+                "prompt": "Add story",
+                "action": self.add_story
+            },
+            "2": {
+                "prompt": "Edit story",
+                "action": self.edit_story
+            },
+            "3": {
+                "prompt": "View stories",
+                "action": self.view_all_stories
+            },
+            "4": {
+                "prompt": "Return",
+                "action": "break"
+            }
+        }
+
         while True:
-            print(Fore.YELLOW + "- User Stories -\n\n" + Fore.WHITE)
+            response = menu_helpers.process_menu(menu)
 
-            print(Fore.YELLOW + "Action:" + Fore.WHITE)
-            action = input()
-            print(Fore.YELLOW + "Goal:" + Fore.WHITE)
-            goal = input()
-
-            confirmed = input(
-                Fore.GREEN +
-                '\n\nConfirm Story [Y/N]: \n' +
-                Fore.WHITE
-            ).upper()
-
-            while confirmed not in ('Y', 'N'):
-                print('Please try again...')
-                confirmed = input('Confirm Story [Y/N]: \n')
-
-            if confirmed == 'Y':
-                self.user_stories.append({
-                    'action': action,
-                    'goal': goal
-                })
-
-            again = input(
-                Fore.GREEN +
-                'Add another story [Y/N]: \n' +
-                Fore.WHITE
-            ).upper()
-
-            while again not in ('Y', 'N'):
-                print('Please try again...')
-                again = input('Add another story [Y/N]:  \n')
-
-            if again == 'N':
+            if response == "4":
                 break
 
-            menu_helpers.clear_screen()
+            menu['options'].get(response)['action']()
 
-        stories_string = ""
-        for count, story in enumerate(self.user_stories):
-            if count == len(self.user_stories) - 1:
-                stories_string += story['goal'] + '|' + story['action']
+    def view_all_stories(self, pause=True):
+
+        if len(self.user_stories) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no user stories. Please add some!"
+                + Fore.WHITE
+            )
+
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        menu_helpers.clear_screen()
+        for i, item in enumerate(self.user_stories):
+            print('-------------------------')
+            print(Fore.BLUE + f'[{i+1}]: ' + Fore.WHITE)
+            print('-------------------------')
+
+            print(
+                Fore.GREEN + "Action: " + Fore.WHITE +
+                "\n" + item['action'] + '\n'
+            )
+
+            print(
+                Fore.GREEN + "Goal: " + Fore.WHITE +
+                "\n" + item['goal']
+            )
+
+            # dont add a seperator if on the last story
+            if i == len(self.user_stories) - 1:
+                print('-------------------------\n\n')
             else:
-                stories_string += story['goal'] + '|' + story['action'] + '\n'
+                print('\n\n')
+
+        if pause:
+            input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
+
+    def add_story(self, write_to_sheet=True):
+        """
+        Prompts the user for the goal and action of a user story
+        """
+
+        menu_helpers.clear_screen()
+        print(Fore.YELLOW + "What is the action of this story? " + Fore.WHITE)
+        action = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+        menu_helpers.clear_screen()
+        print(Fore.YELLOW + "What is the goal of this story? " + Fore.WHITE)
+        goal = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+        self.user_stories.append({
+            "goal": goal,
+            "action": action
+        })
 
         if write_to_sheet:
+            stories_string = ""
+            for count, story in enumerate(self.user_stories):
+                if count == len(self.user_stories) - 1:
+                    stories_string += story['goal'] + '|' + story['action']
+                else:
+                    stories_string += story['goal'] + '|' + story['action'] + '\n'
+
             self.write_section_item_to_sheet(
                 'user_stories',
                 stories_string
             )
+
+    def edit_story(self):
+        """
+        Prompts the user to choose a story to edit, and once chosen
+        allows the user to re-enter story info
+        """
+
+        if len(self.user_stories) == 0:
+            menu_helpers.clear_screen()
+            print(
+                Fore.RED +
+                "This readme currently has no stories. Please add some!"
+                + Fore.WHITE
+            )
+            input(
+                Fore.YELLOW +
+                "Press enter to continue.."
+                + Fore.WHITE
+            )
+            return
+
+        while True:
+
+            menu_helpers.clear_screen()
+            self.view_all_stories(pause=False)
+
+            print(
+                Fore.YELLOW +
+                '\nWhich story would you like to edit?' +
+                Fore.WHITE
+            )
+            response = input()
+
+            if int(response)-1 in range(len(self.user_stories)):
+
+                while True:
+                    menu_helpers.clear_screen()
+                    story_to_edit = self.user_stories[int(response)-1]
+
+                    print(
+                        Fore.GREEN + "Action: " + Fore.WHITE +
+                        "\n" + story_to_edit['action'] +
+                        Fore.GREEN + "Goal: " + Fore.WHITE +
+                        "\n" + story_to_edit['goal']
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\nIs this the story you wish to edit? [Y/N]' +
+                        Fore.WHITE
+                    )
+
+                    confirmed = input().upper()
+
+                    if confirmed not in ('Y', 'N'):
+                        input('Please try again! Press enter to continue..')
+                        continue
+                    elif confirmed == 'N':
+                        break
+                    else:
+                        menu_helpers.clear_screen()
+                        print(Fore.YELLOW + "What is the action of this story? " + Fore.WHITE)
+                        action = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+                        menu_helpers.clear_screen()
+                        print(Fore.YELLOW + "What is the goal of this story? " + Fore.WHITE)
+                        goal = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+
+                        self.user_stories[int(response)-1] = {
+                            "goal": goal,
+                            "action": action
+                        }
+
+                        return
 
     def output_user_stories(self):
         """
