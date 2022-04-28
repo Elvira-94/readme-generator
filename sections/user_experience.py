@@ -31,7 +31,7 @@ class UserExperienceSection(Section):
         self.site_aims = []
         self.target_audience = []
         self.user_stories = []
-        self.flowchart = None
+        self.flowchart = ""
 
         super().__init__(readme, {}, header="User Experience")
 
@@ -161,7 +161,7 @@ class UserExperienceSection(Section):
                     aims_string += aim + '\n'
 
             self.write_section_item_to_sheet(
-                'site_aims',
+                'aims',
                 aims_string
             )
 
