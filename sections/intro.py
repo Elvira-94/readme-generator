@@ -125,9 +125,9 @@ class IntroSection(Section):
             '<br />\n'
 
         output = header_raw + "\n\n" + \
+            intro_image_raw + "\n\n" + \
             self.description + "\n\n" + \
-            demo_link_raw + "\n\n" + \
-            intro_image_raw + "\n\n"
+            demo_link_raw + "\n\n"
 
         return output
 
