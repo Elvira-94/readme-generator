@@ -1,14 +1,14 @@
 ## Introduction
 
+<p align="center"><img src="static/images/IntroImage.png" width="50%" alt=""></p><br />
+
+
 
 ReadmeGenerator is a tool that assists developers with the creation of README.md files for their projects. It is an interactive CLI than can be ran both locally and on Heroku. The tool guides you through the README.md creation process, and automatically creates and formats a markdown structured README.md file for you. 
 
 The tool was created from my experience with projects to date, and the sometimes tediousness of formatting READMEs in markdown. I hope that this tool can help both myself and my classmatlass mates in the future.
 
 You can view the live project here: <a href='https://readme-generator-ci.herokuapp.com/' target='_blank' rel='noopener'>ReadmeGenerator</a>
-
-<p align="center"><img src="IntroImage.png" width="50%" alt=""></p><br />
-
 
 ## User Experience
 
@@ -37,7 +37,7 @@ You can view the live project here: <a href='https://readme-generator-ci.herokua
 
 ### Flowchart
 
-![ReadmeGenerator Flowchart](static/images/ReadMeGeneratorFlowchart.png)
+<p align="center"><img src="static/images/ReadMeGeneratorFlowchart.png" width="50%" alt="ReadmeGenerator Flowchart"></p><br />
 
 
 
