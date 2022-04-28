@@ -1,31 +1,43 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+## Introduction
 
-Welcome Elvira-94,
+<p align="center"><img src="static/images/IntroImage.png" width="50%" alt=""></p><br />
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
 
-## Reminders
 
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
+ReadmeGenerator is a tool that assists developers with the creation of README.md files for their projects. It is an interactive CLI than can be ran both locally and on Heroku. The tool guides you through the README.md creation process, and automatically creates and formats a markdown structured README.md file for you. 
 
-## Creating the Heroku app
+The tool was created from my experience with projects to date, and the sometimes tediousness of formatting READMEs in markdown. I hope that this tool can help both myself and my classmatlass mates in the future.
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+You can view the live project here: <a href='https://readme-generator-ci.herokuapp.com/' target='_blank' rel='noopener'>ReadmeGenerator</a>
 
-1. `heroku/python`
-2. `heroku/nodejs`
+## User Experience
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+### Site Aims
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+ * To provide developers with a seamless experience when creating readme.md files. 
+ * To allow developers to work on their readme files from any browser on any machine with their content saved in a worksheet.
 
-Connect your GitHub repository and deploy as normal.
 
-## Constraints
+### Target Audience
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+ * Developers
+ * My classmates
+ * Myself!
 
------
-Happy coding!
+
+|   ID | GOAL                                                                                                              | ACTION                                                                        |
+|------|-------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+|    1 | Developers can manage the creation of readmes entirely within this tool.                                          | As a user, I can create a new readme project and have it saved online         |
+|    2 | This allows developers to work on their readmes from different browsers or machines.                              | As a user, I can load a previously created readme project from a worksheet    |
+|    3 | Developers can choose what sections to add to their readme so that the readme is custom to their needs            | As a user, I can add a new section to my readme                               |
+|    4 | Developers can update their readme files as they progress through project development                             | As a user, I can modify sections that are already added to my readme          |
+|    5 | Developers can preview what the file currently would look like with the data currently entered in markdown format | As a user, I can preview my readme file in the terminal                       |
+|    6 | Developers can manage the entire creation of a readme file within this tool                                       | As a user, I can request that the tool creates a populated readme file for me |
+|    7 | Developers can work on multiple projects in parallel without overwriting their other project readmes              | As a user, I can switch to a different readme project                         |
+
+### Flowchart
+
+<p align="center"><img src="static/images/ReadMeGeneratorFlowchart.png" width="50%" alt="ReadmeGenerator Flowchart"></p><br />
+
+
+
