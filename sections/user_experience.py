@@ -36,6 +36,10 @@ class UserExperienceSection(Section):
         super().__init__(readme, {}, header="User Experience")
 
     def display_menu(self):
+        """
+        Displays the menu for the user experience section to the user
+        and calls the appropriate function based on user response
+        """
         menu = menu_helpers.CHOICE_MENU_PROMPT
         menu['options'] = {
             "1": {
@@ -64,13 +68,12 @@ class UserExperienceSection(Section):
 
         if menu['options'].get(response, {})['action'] == 'break':
             return
-        else: 
-            menu['options'].get(response, {})['action']()
 
-    def set_site_aims(self, write_to_sheet=True):
+        menu['options'].get(response, {})['action']()
+
+    def set_site_aims(self):
         """
-        Sets the site_aims attribute. Each newline entered by the
-        user is treated as an individual site aim
+        Shows a menu to allow a user to manage the site aims of the section
         """
 
         menu = menu_helpers.CHOICE_MENU_PROMPT
@@ -106,6 +109,10 @@ class UserExperienceSection(Section):
             menu['options'].get(response)['action']()
 
     def view_all_site_aims(self, pause=True):
+        """
+        Displays all site aims to the terminal and if set,
+        awaits user input before continuing
+        """
 
         if len(self.site_aims) == 0:
             menu_helpers.clear_screen()
@@ -136,7 +143,7 @@ class UserExperienceSection(Section):
 
     def add_site_aim(self, write_to_sheet=True):
         """
-        Prompts the user for the goal and action of a user story
+        Prompts the user for the site aim and sets it
         """
 
         menu_helpers.clear_screen()
@@ -211,34 +218,39 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        menu_helpers.clear_screen()
-                        print(Fore.YELLOW + "Please enter the new aim value:" + Fore.WHITE)
-                        aim = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        self.site_aims[int(response)-1] = aim
+                    menu_helpers.clear_screen()
+                    print(
+                        Fore.YELLOW +
+                        "Please enter the new aim value:" +
+                        Fore.WHITE
+                    )
+                    aim = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        if write_to_sheet:
-                            aims_string = ""
-                            for count, aim in enumerate(self.site_aims):
-                                if count == len(self.site_aims) - 1:
-                                    aims_string += aim
-                                else:
-                                    aims_string += aim + '\n'
+                    self.site_aims[int(response)-1] = aim
 
-                            self.write_section_item_to_sheet(
-                                'aims',
-                                aims_string
-                            )
+                    if write_to_sheet:
+                        aims_string = ""
+                        for count, aim in enumerate(self.site_aims):
+                            if count == len(self.site_aims) - 1:
+                                aims_string += aim
+                            else:
+                                aims_string += aim + '\n'
 
-                        return
+                        self.write_section_item_to_sheet(
+                            'aims',
+                            aims_string
+                        )
+
+                    return
 
     def delete_site_aim(self, write_to_sheet=True):
         """
-        Prompts the user to choose an aim to edit, and once chosen
-        allows the user to re-enter aim info
+        Prompts the user to choose an aim to delete, and once chosen
+        deletes the entry
         """
 
         if len(self.site_aims) == 0:
@@ -288,30 +300,30 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        del self.site_aims[int(response)-1]
 
-                        if write_to_sheet:
-                            aims_string = ""
-                            for count, aim in enumerate(self.site_aims):
-                                if count == len(self.site_aims) - 1:
-                                    aims_string += aim
-                                else:
-                                    aims_string += aim + '\n'
+                    del self.site_aims[int(response)-1]
 
-                            self.write_section_item_to_sheet(
-                                'aims',
-                                aims_string
-                            )
+                    if write_to_sheet:
+                        aims_string = ""
+                        for count, aim in enumerate(self.site_aims):
+                            if count == len(self.site_aims) - 1:
+                                aims_string += aim
+                            else:
+                                aims_string += aim + '\n'
 
-                        return
+                        self.write_section_item_to_sheet(
+                            'aims',
+                            aims_string
+                        )
+
+                    return
 
     def load_site_aims(self, site_aims):
         """
-        Sets the site_aims attribute. Each newline entered by the
-        user is treated as an individual site aim
+        Loads the site aims for the class from worksheet data
         """
         if site_aims:
             aims_split = site_aims.split('\n')
@@ -321,8 +333,7 @@ class UserExperienceSection(Section):
 
     def load_user_stories(self, user_stories):
         """
-        Sets the user_stories attribute. Each newline
-        is treated as an individual user story
+        Loads the user stories for the class from worksheet data
         """
         for story in user_stories.split('\n'):
             goal = story.split('|')[0]
@@ -335,7 +346,7 @@ class UserExperienceSection(Section):
 
     def load_flowchart(self, flowchart):
         """
-        Sets the flowchart attribute
+        Sets the flowchart attribute from worksheet data
         """
         self.flowchart = flowchart
 
@@ -352,9 +363,9 @@ class UserExperienceSection(Section):
 
         return output
 
-    def set_target_audience(self, write_to_sheet=True):
+    def set_target_audience(self):
         """
-        Allows the user to edit the target audience attribute
+        Shows a menu to the user allowing them to manage the target audience of the section
         """
 
         menu = menu_helpers.CHOICE_MENU_PROMPT
@@ -390,12 +401,17 @@ class UserExperienceSection(Section):
             menu['options'].get(response)['action']()
 
     def view_all_target_audiences(self, pause=True):
+        """
+        Displays the target audiences to the screen and if set
+        awaits user input before returning
+        """
 
         if len(self.target_audience) == 0:
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no target audience. Please add some!"
+                "This readme currently has no target audience. " +
+                "Please add some!" +
                 + Fore.WHITE
             )
 
@@ -414,7 +430,6 @@ class UserExperienceSection(Section):
             # dont add a seperator if on the last story
             if i == len(self.target_audience) - 1:
                 print('-------------------------\n\n')
-            
 
         if pause:
             input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
@@ -453,7 +468,8 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no target audience. Please add some!"
+                "This readme currently has no target audience." +
+                " Please add some!" +
                 + Fore.WHITE
             )
             input(
@@ -479,7 +495,9 @@ class UserExperienceSection(Section):
 
                 while True:
                     menu_helpers.clear_screen()
-                    target_audience_to_edit = self.target_audience[int(response)-1]
+                    target_audience_to_edit = self.target_audience[
+                        int(response)-1
+                    ]
 
                     print(
                         Fore.BLUE + target_audience_to_edit + Fore.WHITE
@@ -487,7 +505,8 @@ class UserExperienceSection(Section):
 
                     print(
                         Fore.YELLOW +
-                        '\nIs this the target audience you wish to edit? [Y/N]' +
+                        '\nIs this the target audience you wish to edit?' +
+                        '[Y/N]' +
                         Fore.WHITE
                     )
 
@@ -496,29 +515,40 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        menu_helpers.clear_screen()
-                        print(Fore.YELLOW + "Please enter the new target audience value:" + Fore.WHITE)
-                        target_audience = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        self.target_audience[int(response)-1] = target_audience
+                    menu_helpers.clear_screen()
+                    print(
+                        Fore.YELLOW +
+                        "Please enter the new target audience value:" +
+                        Fore.WHITE
+                    )
+                    target_audience = input(
+                        Fore.YELLOW +
+                        ' -> ' +
+                        Fore.WHITE
+                    )
 
-                        if write_to_sheet:
-                            target_audience_string = ""
-                            for count, target_audience in enumerate(self.target_audience):
-                                if count == len(self.target_audience) - 1:
-                                    target_audience_string += target_audience
-                                else:
-                                    target_audience_string += target_audience + '\n'
+                    self.target_audience[int(response)-1] = target_audience
 
-                            self.write_section_item_to_sheet(
-                                'target_audience',
-                                target_audience_string
-                            )
+                    if write_to_sheet:
+                        target_audience_string = ""
+                        for count, target_audience in enumerate(
+                            self.target_audience
+                        ):
+                            if count == len(self.target_audience) - 1:
+                                target_audience_string += target_audience
+                            else:
+                                target_audience_string += target_audience + '\n'
 
-                        return
+                        self.write_section_item_to_sheet(
+                            'target_audience',
+                            target_audience_string
+                        )
+
+                    return
 
     def delete_target_audience(self, write_to_sheet=True):
         """
@@ -530,7 +560,8 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no target audience. Please add some!"
+                "This readme currently has no target audience. " +
+                "Please add some!" +
                 + Fore.WHITE
             )
             input(
@@ -556,7 +587,9 @@ class UserExperienceSection(Section):
 
                 while True:
                     menu_helpers.clear_screen()
-                    target_audience_to_edit = self.target_audience[int(response)-1]
+                    target_audience_to_edit = self.target_audience[
+                        int(response)-1
+                    ]
 
                     print(
                         Fore.BLUE + target_audience_to_edit + Fore.WHITE
@@ -573,26 +606,28 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        
-                        del self.target_audience[int(response)-1]
 
-                        if write_to_sheet:
-                            target_audience_string = ""
-                            for count, target_audience in enumerate(self.target_audience):
-                                if count == len(self.target_audience) - 1:
-                                    target_audience_string += target_audience
-                                else:
-                                    target_audience_string += target_audience + '\n'
+                    del self.target_audience[int(response)-1]
 
-                            self.write_section_item_to_sheet(
-                                'target_audience',
-                                target_audience_string
-                            )
+                    if write_to_sheet:
+                        target_audience_string = ""
+                        for count, target_audience in enumerate(
+                            self.target_audience
+                        ):
+                            if count == len(self.target_audience) - 1:
+                                target_audience_string += target_audience
+                            else:
+                                target_audience_string += target_audience + '\n'
 
-                        return
+                        self.write_section_item_to_sheet(
+                            'target_audience',
+                            target_audience_string
+                        )
+
+                    return
 
     def load_target_audience(self, target_audience):
         """
@@ -619,7 +654,7 @@ class UserExperienceSection(Section):
 
         return output
 
-    def set_user_stories(self, write_to_sheet=True):
+    def set_user_stories(self):
         """
         Sets the site_aims attribute. Each newline entered by the
         user is treated as an individual site aim
@@ -658,6 +693,10 @@ class UserExperienceSection(Section):
             menu['options'].get(response)['action']()
 
     def view_all_stories(self, pause=True):
+        """
+        Displays all stories to the user and if set,
+        awaits user input before returning
+        """
 
         if len(self.user_stories) == 0:
             menu_helpers.clear_screen()
@@ -786,36 +825,37 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        menu_helpers.clear_screen()
-                        print(Fore.YELLOW + "What is the action of this story? " + Fore.WHITE)
-                        action = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        menu_helpers.clear_screen()
-                        print(Fore.YELLOW + "What is the goal of this story? " + Fore.WHITE)
-                        goal = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
+                    menu_helpers.clear_screen()
+                    print(Fore.YELLOW + "What is the action of this story? " + Fore.WHITE)
+                    action = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        self.user_stories[int(response)-1] = {
-                            "goal": goal,
-                            "action": action
-                        }
+                    menu_helpers.clear_screen()
+                    print(Fore.YELLOW + "What is the goal of this story? " + Fore.WHITE)
+                    goal = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
-                        if write_to_sheet:
-                            stories_string = ""
-                            for count, story in enumerate(self.user_stories):
-                                if count == len(self.user_stories) - 1:
-                                    stories_string += story['goal'] + '|' + story['action']
-                                else:
-                                    stories_string += story['goal'] + '|' + story['action'] + '\n'
+                    self.user_stories[int(response)-1] = {
+                        "goal": goal,
+                        "action": action
+                    }
 
-                            self.write_section_item_to_sheet(
-                                'user_stories',
-                                stories_string
-                            )
+                    if write_to_sheet:
+                        stories_string = ""
+                        for count, story in enumerate(self.user_stories):
+                            if count == len(self.user_stories) - 1:
+                                stories_string += story['goal'] + '|' + story['action']
+                            else:
+                                stories_string += story['goal'] + '|' + story['action'] + '\n'
 
-                        return
+                        self.write_section_item_to_sheet(
+                            'user_stories',
+                            stories_string
+                        )
+
+                    return
 
     def delete_story(self, write_to_sheet=True):
         """
@@ -849,7 +889,7 @@ class UserExperienceSection(Section):
             )
 
             response = input()
-            
+
             if int(response)-1 in range(len(self.user_stories)):
 
                 while True:
@@ -874,26 +914,26 @@ class UserExperienceSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
 
-                        del self.user_stories[int(response)-1]
+                    del self.user_stories[int(response)-1]
 
-                        if write_to_sheet:
-                            stories_string = ""
-                            for count, story in enumerate(self.user_stories):
-                                if count == len(self.user_stories) - 1:
-                                    stories_string += story['goal'] + '|' + story['action']
-                                else:
-                                    stories_string += story['goal'] + '|' + story['action'] + '\n'
+                    if write_to_sheet:
+                        stories_string = ""
+                        for count, story in enumerate(self.user_stories):
+                            if count == len(self.user_stories) - 1:
+                                stories_string += story['goal'] + '|' + story['action']
+                            else:
+                                stories_string += story['goal'] + '|' + story['action'] + '\n'
 
-                            self.write_section_item_to_sheet(
-                                'user_stories',
-                                stories_string
-                            )
+                        self.write_section_item_to_sheet(
+                            'user_stories',
+                            stories_string
+                        )
 
-                        return
+                    return
 
     def output_user_stories(self):
         """
