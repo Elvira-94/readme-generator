@@ -129,20 +129,26 @@ class FeaturesSection(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
+
+                    if confirmed == 'N':
                         break
-                    else:
-                        feature_to_edit.edit_feature()
-                        return
+
+                    feature_to_edit.edit_feature()
+                    return
 
     def get_feature(self, feature_index):
-
+        """
+        Returns a feature object at the given index
+        """
         try:
             return self.features[feature_index]
-        except ValueError:
-            raise Exception('Invlid Index retrieving feature')
+        except ValueError as err:
+            raise err
 
     def view_all_features(self, pause=True, detailed=True):
+        """
+        Displays all features to the terminal and awaits user confirmation before returning
+        """
 
         if len(self.features) == 0:
             menu_helpers.clear_screen()
@@ -252,6 +258,10 @@ class Feature(Section):
         super().__init__(feature, questions_dict, header=feature_name)
 
     def edit_feature(self):
+        """
+        Allows a user to edit a feature by calling specific functions to modify
+        class attributes
+        """
         self.questions_dict = {
             1: {
                 "question": "Feature Title:",
@@ -274,13 +284,22 @@ class Feature(Section):
         self.display_menu()
 
     def set_feature_name(self, name):
+        """
+        Sets the feature_name attribute
+        """
         self.feature_name = name
 
     def get_feature_name(self):
+        """
+        Returns the feature_name attribute
+        """
         return self.feature_name
 
     def view_points_of_note(self, pause=False, detailed=False):
-
+        """
+        Displays the features points of note to the terminal and if set
+        awaits user confirmation before returning
+        """
         menu_helpers.clear_screen()
         for i, item in enumerate(self.points_of_note):
             print(
@@ -296,7 +315,10 @@ class Feature(Section):
             input(Fore.YELLOW + 'Press enter to continue' + Fore.WHITE)
 
     def edit_point_of_note(self):
-
+        """
+        Displays points of notes and when selected, allows a user to edit
+        a specific point
+        """
         while True:
 
             menu_helpers.clear_screen()
@@ -332,26 +354,27 @@ class Feature(Section):
                     if confirmed not in ('Y', 'N'):
                         input('Please try again! Press enter to continue..')
                         continue
-                    elif confirmed == 'N':
-                        break
-                    else:
-                        menu_helpers.clear_screen()
-                        print(
-                            '\n' +
-                            Fore.MAGENTA +
-                            'Current Value: ' +
-                            Fore.LIGHTMAGENTA_EX +
-                            self.points_of_note[int(response)-1] +
-                            Fore.WHITE
-                        )
 
-                        print(
-                            Fore.YELLOW +
-                            '\n\nPlease enter a new value:' +
-                            Fore.WHITE
-                        )
-                        self.points_of_note[int(response)-1] = input(' -> ')
-                        return
+                    if confirmed == 'N':
+                        break
+
+                    menu_helpers.clear_screen()
+                    print(
+                        '\n' +
+                        Fore.MAGENTA +
+                        'Current Value: ' +
+                        Fore.LIGHTMAGENTA_EX +
+                        self.points_of_note[int(response)-1] +
+                        Fore.WHITE
+                    )
+
+                    print(
+                        Fore.YELLOW +
+                        '\n\nPlease enter a new value:' +
+                        Fore.WHITE
+                    )
+                    self.points_of_note[int(response)-1] = input(' -> ')
+                    return
 
     def add_point_of_note(self, point):
         """
@@ -463,6 +486,9 @@ class Feature(Section):
         return output
 
     def load_feature(self, feature_json):
+        """
+        Loads feature attributes from worksheet data
+        """
         if feature_json.get('feature_name'):
             self.set_feature_name(feature_json['feature_name'])
 
