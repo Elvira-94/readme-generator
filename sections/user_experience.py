@@ -770,7 +770,7 @@ class UserExperienceSection(Section):
 
                     print(
                         Fore.GREEN + "Action: " + Fore.WHITE +
-                        "\n" + story_to_edit['action'] +
+                        "\n" + story_to_edit['action'] + '\n' +
                         Fore.GREEN + "Goal: " + Fore.WHITE +
                         "\n" + story_to_edit['goal']
                     )
@@ -815,7 +815,7 @@ class UserExperienceSection(Section):
                                 stories_string
                             )
 
-                        return 
+                        return
 
     def delete_story(self, write_to_sheet=True):
         """
@@ -847,7 +847,7 @@ class UserExperienceSection(Section):
                 '\nWhich story would you like to delete?' +
                 Fore.WHITE
             )
-            
+
             response = input()
             
             if int(response)-1 in range(len(self.user_stories)):
@@ -858,7 +858,7 @@ class UserExperienceSection(Section):
 
                     print(
                         Fore.GREEN + "Action: " + Fore.WHITE +
-                        "\n" + story_to_edit['action'] +
+                        "\n" + story_to_edit['action'] + '\n' +
                         Fore.GREEN + "Goal: " + Fore.WHITE +
                         "\n" + story_to_edit['goal']
                     )
