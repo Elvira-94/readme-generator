@@ -947,7 +947,9 @@ class UserExperienceSection(Section):
         for count, value in enumerate(self.user_stories):
             rows.append([count + 1, value['goal'], value['action']])
 
-        return tabulate(rows, headers=headers, tablefmt="github")
+        output = "### User Stories\n\n"
+        output += tabulate(rows, headers=headers, tablefmt="github")
+        return output
 
     def set_flowchart(self, write_to_sheet=True):
         """
