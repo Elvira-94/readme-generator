@@ -88,13 +88,13 @@ class FeaturesSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no features. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no features. Please add some!" +
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -147,7 +147,7 @@ class FeaturesSection(Section):
 
     def view_all_features(self, pause=True, detailed=True):
         """
-        Displays all features to the terminal and awaits user confirmation 
+        Displays all features to the terminal and awaits user confirmation
         before returning
         """
 
@@ -155,14 +155,14 @@ class FeaturesSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no features. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no features. Please add some!" +
+                Fore.WHITE
             )
 
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -219,9 +219,13 @@ class FeaturesSection(Section):
 
             if feature_split[1] == 'point_of_note':
                 if features[feature_split[0]].get(feature_split[1]):
-                    features[feature_split[0]][feature_split[1]].append(row.get('Value'))
+                    features[feature_split[0]][feature_split[1]].append(
+                        row.get('Value')
+                    )
                 else:
-                    features[feature_split[0]][feature_split[1]] = [row.get('Value')]
+                    features[feature_split[0]][feature_split[1]] = [
+                        row.get('Value')
+                    ]
             else:
                 features[feature_split[0]][feature_split[1]] = row.get('Value')
 
@@ -236,7 +240,9 @@ class Feature(Section):
     This class represents a single feature of the features section.
     """
 
-    def __init__(self, feature, feature_name, feature_number, write_to_file=True):
+    def __init__(self, feature,
+                 feature_name, feature_number,
+                 write_to_file=True):
         self.points_of_note = []
         self.image_path = ""
         self.image_alt = ""
@@ -542,11 +548,17 @@ class Feature(Section):
         Loads feature attributes from worksheet data
         """
         if feature_json.get('feature_name'):
-            self.set_feature_name(feature_json['feature_name'], write_to_file=False)
+            self.set_feature_name(
+                feature_json['feature_name'],
+                write_to_file=False
+            )
 
         if feature_json.get('point'):
             for point in feature_json.get('point').split('\n'):
                 self.add_point_of_note(point)
 
         if feature_json.get('image_path'):
-            self.add_image_path(feature_json['image_path'], write_to_file=False)
+            self.add_image_path(
+                feature_json['image_path'],
+                write_to_file=False
+            )
