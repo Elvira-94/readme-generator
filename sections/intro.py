@@ -113,7 +113,7 @@ class IntroSection(Section):
         Outputs the content of the section in GitHub markdown format
         as expected for the README document structure
         """
-
+        title_raw = f'# {self.readme.title}'
         header_raw = f"## {self.header}"
 
         demo_link_raw = "You can view the live project here: " + \
@@ -125,7 +125,8 @@ class IntroSection(Section):
             'width="50%" alt=""></p>' +\
             '<br />\n'
 
-        output = header_raw + "\n\n" + \
+        output = title_raw + "\n\n" +\
+            header_raw + "\n\n" + \
             intro_image_raw + "\n\n" + \
             self.description + "\n\n" + \
             demo_link_raw + "\n\n"
