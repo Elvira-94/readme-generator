@@ -544,8 +544,8 @@ class Feature(Section):
         if feature_json.get('feature_name'):
             self.set_feature_name(feature_json['feature_name'], write_to_file=False)
 
-        if feature_json.get('point_of_note'):
-            for point in feature_json.get('point_of_note'):
+        if feature_json.get('point'):
+            for point in feature_json.get('point').split('\n'):
                 self.add_point_of_note(point)
 
         if feature_json.get('image_path'):
