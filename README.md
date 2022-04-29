@@ -254,5 +254,51 @@ http://pep8online.com/
 * The reason for PEP8 errors in run.py are due to printing the start animation.
 * This has not been modified as bringing the print statements into new lines would make readability of the code much more difficult.
 
+## Deployment:
 
+This project was deployed using Code Institute's mock terminal for Heroku.
 
+ * Steps for deployment on Heroku
+   * Fork or clone this repository
+   * Create a new Heroku app
+   * Set the buildbacks to Python and NodeJS in that order
+   * In Settings -> Config Vars, add a config var for 'PORT' - '8000'
+   * In Settings -> Config Vars, add a config var for 'CREDS' - Your google spreadsheet credentials
+   * Link the Heroku app to the repository
+   * Click on Deploy
+
+* Steps for deployment on Heroku
+   * Fork or clone this repository
+   * Navigate into the reposity and run 'Python3 run.py'
+
+## Bugs:
+
+### Solved: 
+ * Creating new readme projects led to data not populating on the worksheet for the project. This was fixed by ensuring the table headers were being set when a worksheet was created. Once headers were present, section classes knew how where to look for data. 
+ * Data was being being sent to the worksheet each time data was being populated by the tool when loading sections. This was because code to write to the spreadsheet was in the section functions that set their corresponding variables. When data was being loaded and setting the variables, it was then writing to the worksheet and cause very slow runtimes when using the tool. This was fixed by adding a 'write_to_sheet' variable to the function arguments, which tells the fuction if it should write to the spreadsheet or not when called. Value is True, when a user is setting values, and False when loading from the spreadsheet.
+ * There were lots of issues in importing the section classes into other classes since they were in a different folder to run.py and readme.py. This was solved by creating an __init__.py file inside the folder, and adding import commands for the classes inside the __init__.py file. 
+
+### Remaining:
+ * When editing features, it is currently not possible to add/remove points of note for the feature. You can only modify points already created.
+ 
+
+ ## Credits:
+
+ * https://docs.gspread.org/en/v5.3.2/ - For interacting with Google Spreadsheets 
+ * https://pypi.org/project/tabulate/ - For creating tables in markdown for user stories with the UserExperienceSection class
+ * https://stackoverflow.com/questions/63882369/can-i-amend-a-commit-made-with-vscode-to-github-repo - For helping me to fix incorrect commits
+ * https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console - For clearing the terminal screen
+ * https://realpython.com/iterate-through-dictionary-python/#iterating-through-items - For iterating through dictionaries
+ * https://timothybramlett.com/How_to_create_a_Python_Package_with___init__py.html - For solving import issues with section classes
+ * https://www.programiz.com/python-programming/inheritance - For helping to understand inheritance 
+ * https://stackoverflow.com/questions/30239092/how-to-get-multiline-input-from-user - For multi line input from users
+ * https://pypi.org/project/colorama/ - For changing the color of text
+ * https://realpython.com/python-enumerate/ - For learning enumerate() 
+
+ ## Acknowledgements
+
+ The ReadmeGenerator was built as part of my Portfolio Project 3 (Python) on behalf of a Full Stack Software Developer Diploma at the Code Institute. I'd like to thank the inspiration for this website from my mentor Richard Wells, as well as the Slack community and everyone at the Code Institute for their help and loving support. I'd like to especially thank my partner Dan for all of his loving support throughout the creation of this project. I couldn't have done it without being able to run my questions/issues by him.
+ 
+ Creating this tool has taught me a lot, and I'm now much more confident in my abilities when it comes to planning, building, testing, and deploying a fully working app based on Python.
+
+ <p align="center"><img src="static/images/Goodbye.png" width="50%" alt=""></p><br />
