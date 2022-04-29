@@ -264,7 +264,7 @@ http://pep8online.com/
 * The reason for PEP8 errors in run.py are due to printing the start animation.
 * This has not been modified as bringing the print statements into new lines would make readability of the code much more difficult.
 
-## Deployment:
+## Deployment
 
 This project was deployed using Code Institute's mock terminal for Heroku.
 
@@ -281,7 +281,7 @@ This project was deployed using Code Institute's mock terminal for Heroku.
    * Fork or clone this repository
    * Navigate into the repository and run 'Python3 run.py'
 
-## Bugs:
+## Bugs
 
 ### Solved: 
  * Creating new readme projects led to data not populating on the worksheet for the project. This was fixed by ensuring the table headers were being set when a worksheet was created. Once headers were present, section classes knew where to look for data. 
@@ -291,7 +291,7 @@ This project was deployed using Code Institute's mock terminal for Heroku.
 ### Remaining:
  * When editing features, it is currently not possible to add/remove points of note for the feature. You can only modify points already created.
  
- ## Credits:
+ ## Credits
 
  * https://docs.gspread.org/en/v5.3.2/ - For interacting with Google Spreadsheets. 
  * https://pypi.org/project/tabulate/ - For creating tables in markdown for user stories with the UserExperienceSection class.
