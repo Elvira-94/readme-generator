@@ -527,7 +527,6 @@ class Feature(Section):
                 self.feature_number + '|point',
                 points_string
             )
-        return
 
     def output_raw(self):
         """
