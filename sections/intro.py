@@ -120,7 +120,8 @@ class IntroSection(Section):
             f"<a href='{self.demo_link}' target='_blank' rel='noopener'>" + \
             f"{self.readme.title}</a>"
 
-        intro_image_raw = f'<p align="center"><img src="{self.get_intro_image()}" ' +\
+        intro_image_raw = '<p align="center">' +\
+            f'<img src="{self.get_intro_image()}" ' +\
             'width="50%" alt=""></p>' +\
             '<br />\n'
 
