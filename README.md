@@ -279,7 +279,7 @@ This project was deployed using Code Institute's mock terminal for Heroku.
 
 * Steps for deployment on Heroku
    * Fork or clone this repository
-   * Navigate into the reposity and run 'Python3 run.py'
+   * Navigate into the repository and run 'Python3 run.py'
 
 ## Bugs:
 
