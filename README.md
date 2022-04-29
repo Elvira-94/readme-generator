@@ -294,6 +294,7 @@ This project was deployed using Code Institute's mock terminal for Heroku.
  * https://stackoverflow.com/questions/30239092/how-to-get-multiline-input-from-user - For multi line input from users
  * https://pypi.org/project/colorama/ - For changing the color of text
  * https://realpython.com/python-enumerate/ - For learning enumerate() 
+ * https://patorjk.com/software/taag/ - For ascii art 
 
  ## Acknowledgements
 
