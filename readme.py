@@ -175,8 +175,8 @@ class Readme:
 
         print(self.output_raw())
         print(
-            Fore.RED + "If the readme is longer than the terminal window,\n"
-            + "please scroll up to view more content" + Fore.WHITE
+            Fore.RED + "If the readme is longer than the terminal window,\n" +
+            "please scroll up to view more content" + Fore.WHITE
         )
         input(Fore.YELLOW + "Press enter to continue.." + Fore.WHITE)
 
