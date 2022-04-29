@@ -155,6 +155,8 @@ Value:
 ## Testing
 
 ### Pylint results:
+"Pylint is a tool that checks for errors in Python code, tries to enforce a coding standard and looks for code smells."
+https://pylint.pycqa.org/en/latest/
 
 **run.py**
 ```
@@ -205,7 +207,52 @@ Your code has been rated at 9.80/10 (previous run: 9.80/10, +0.00)
 Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)
 ```
 
+### Pycodestyle results:
+"A tool to check your Python code against some of the style conventions in PEP 8."
+https://pypi.org/project/pycodestyle/
 
+**run.py**
+```
+run.py:48:80: E501 line too long (87 > 79 characters)
+run.py:54:80: E501 line too long (96 > 79 characters)
+run.py:56:80: E501 line too long (80 > 79 characters)
+run.py:57:80: E501 line too long (83 > 79 characters)
+run.py:58:80: E501 line too long (86 > 79 characters)
+run.py:61:80: E501 line too long (90 > 79 characters)
+```
+
+**readme.py**
+```
+NA
+```
+
+**sections/section.py**
+```
+NA
+```
+
+**sections/intro.py**
+```
+NA
+```
+
+**sections/user_experience.py**
+```
+NA
+```
+
+**sections/features.py**
+```
+NA
+```
+
+### PEP8 Online
+"Check your code for PEP8 requirements"
+http://pep8online.com/
+
+* All code has been validated on this website with the same results as pycodestyle above. 
+* The reason for PEP8 errors in run.py are due to printing the start animation.
+* This has not been modified as bringing the print statements into new lines would make readability of the code much more difficult.
 
 
 
