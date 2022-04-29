@@ -237,8 +237,6 @@ class Feature(Section):
     """
 
     def __init__(self, feature, feature_name, feature_number, write_to_file=True):
-        self.set_feature_name(feature_name, write_to_file)
-        self.feature_number = str(feature_number)
         self.points_of_note = []
         self.image_path = ""
         self.image_alt = ""
@@ -258,6 +256,8 @@ class Feature(Section):
         }
 
         super().__init__(feature.readme, questions_dict, header=feature.header)
+        self.feature_number = str(feature_number)
+        self.set_feature_name(feature_name, write_to_file)
 
     def edit_feature(self):
         """
