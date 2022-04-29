@@ -118,14 +118,14 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no site aims. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no site aims. Please add some!" +
+                Fore.WHITE
             )
 
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -175,13 +175,13 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no site aims. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no site aims. Please add some!" +
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -257,13 +257,13 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no site aims. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no site aims. Please add some!" +
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -365,7 +365,8 @@ class UserExperienceSection(Section):
 
     def set_target_audience(self):
         """
-        Shows a menu to the user allowing them to manage the target audience of the section
+        Shows a menu to the user allowing them to manage the target
+        audience of the section
         """
 
         menu = menu_helpers.CHOICE_MENU_PROMPT
@@ -412,13 +413,13 @@ class UserExperienceSection(Section):
                 Fore.RED +
                 "This readme currently has no target audience. " +
                 "Please add some!" +
-                + Fore.WHITE
+                Fore.WHITE
             )
 
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -440,7 +441,11 @@ class UserExperienceSection(Section):
         """
 
         menu_helpers.clear_screen()
-        print(Fore.YELLOW + "Please enter the target audience to add: " + Fore.WHITE)
+        print(
+            Fore.YELLOW +
+            "Please enter the target audience to add: " +
+            Fore.WHITE
+        )
         target_audience = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
         self.target_audience.append(target_audience)
@@ -470,12 +475,12 @@ class UserExperienceSection(Section):
                 Fore.RED +
                 "This readme currently has no target audience." +
                 " Please add some!" +
-                + Fore.WHITE
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -541,7 +546,8 @@ class UserExperienceSection(Section):
                             if count == len(self.target_audience) - 1:
                                 target_audience_string += target_audience
                             else:
-                                target_audience_string += target_audience + '\n'
+                                target_audience_string += target_audience
+                                target_audience += '\n'
 
                         self.write_section_item_to_sheet(
                             'target_audience',
@@ -562,12 +568,12 @@ class UserExperienceSection(Section):
                 Fore.RED +
                 "This readme currently has no target audience. " +
                 "Please add some!" +
-                + Fore.WHITE
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -597,7 +603,8 @@ class UserExperienceSection(Section):
 
                     print(
                         Fore.YELLOW +
-                        '\nIs this the target audience you wish to delete? [Y/N]' +
+                        '\nIs this the target audience you wish to delete?' +
+                        ' [Y/N]' +
                         Fore.WHITE
                     )
 
@@ -620,7 +627,8 @@ class UserExperienceSection(Section):
                             if count == len(self.target_audience) - 1:
                                 target_audience_string += target_audience
                             else:
-                                target_audience_string += target_audience + '\n'
+                                target_audience_string += target_audience
+                                target_audience_string += '\n'
 
                         self.write_section_item_to_sheet(
                             'target_audience',
@@ -702,14 +710,14 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no user stories. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no user stories. Please add some!" +
+                Fore.WHITE
             )
 
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -762,7 +770,8 @@ class UserExperienceSection(Section):
                 if count == len(self.user_stories) - 1:
                     stories_string += story['goal'] + '|' + story['action']
                 else:
-                    stories_string += story['goal'] + '|' + story['action'] + '\n'
+                    stories_string += story['goal'] + '|'
+                    stories_string += story['action'] + '\n'
 
             self.write_section_item_to_sheet(
                 'user_stories',
@@ -779,13 +788,13 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no stories. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no stories. Please add some!" +
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -830,11 +839,19 @@ class UserExperienceSection(Section):
                         break
 
                     menu_helpers.clear_screen()
-                    print(Fore.YELLOW + "What is the action of this story? " + Fore.WHITE)
+                    print(
+                        Fore.YELLOW +
+                        "What is the action of this story? " +
+                        Fore.WHITE
+                    )
                     action = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
                     menu_helpers.clear_screen()
-                    print(Fore.YELLOW + "What is the goal of this story? " + Fore.WHITE)
+                    print(
+                        Fore.YELLOW +
+                        "What is the goal of this story? " +
+                        Fore.WHITE
+                    )
                     goal = input(Fore.YELLOW + ' -> ' + Fore.WHITE)
 
                     self.user_stories[int(response)-1] = {
@@ -846,9 +863,11 @@ class UserExperienceSection(Section):
                         stories_string = ""
                         for count, story in enumerate(self.user_stories):
                             if count == len(self.user_stories) - 1:
-                                stories_string += story['goal'] + '|' + story['action']
+                                stories_string += story['goal'] + '|'
+                                stories_string += story['action']
                             else:
-                                stories_string += story['goal'] + '|' + story['action'] + '\n'
+                                stories_string += story['goal'] + '|'
+                                stories_string += story['action'] + '\n'
 
                         self.write_section_item_to_sheet(
                             'user_stories',
@@ -867,13 +886,13 @@ class UserExperienceSection(Section):
             menu_helpers.clear_screen()
             print(
                 Fore.RED +
-                "This readme currently has no stories. Please add some!"
-                + Fore.WHITE
+                "This readme currently has no stories. Please add some!" +
+                Fore.WHITE
             )
             input(
                 Fore.YELLOW +
-                "Press enter to continue.."
-                + Fore.WHITE
+                "Press enter to continue.." +
+                Fore.WHITE
             )
             return
 
@@ -924,9 +943,11 @@ class UserExperienceSection(Section):
                         stories_string = ""
                         for count, story in enumerate(self.user_stories):
                             if count == len(self.user_stories) - 1:
-                                stories_string += story['goal'] + '|' + story['action']
+                                stories_string += story['goal'] + '|'
+                                stories_string += story['action']
                             else:
-                                stories_string += story['goal'] + '|' + story['action'] + '\n'
+                                stories_string += story['goal'] + '|'
+                                stories_string += story['action'] + '\n'
 
                         self.write_section_item_to_sheet(
                             'user_stories',
